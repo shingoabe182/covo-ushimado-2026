@@ -1,0 +1,367 @@
+:root{
+  --white:#FFFFFF;
+  --paper:#FBFAF7;
+  --offwhite:#F4F2EC;
+  --line:#E3E0D7;
+  --line-soft:#EFEDE6;
+  --ink:#1A1A1A;
+  --ink-2:#3A3A36;
+  --ink-3:#7A7A74;
+  --ink-4:#B4B2AB;
+  --brass:#957C58;
+  --serif:'Cormorant Garamond','Noto Serif JP', serif;
+  --jp:'Noto Serif JP', serif;
+  --sans:'Inter', system-ui, sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{background:var(--white);color:var(--ink);font-family:var(--sans);overflow-x:hidden;-webkit-font-smoothing:antialiased;font-weight:300;}
+body{cursor:none;}
+a{color:inherit;text-decoration:none;}
+img{display:block;max-width:100%;}
+
+/* ============ Cursor ============ */
+.cursor{position:fixed;width:5px;height:5px;border-radius:50%;background:var(--ink);
+  top:0;left:0;transform:translate(-50%,-50%);pointer-events:none;z-index:999;
+  transition:width .4s ease,height .4s ease,background .25s,opacity .25s;}
+.cursor.big{width:48px;height:48px;background:var(--ink);opacity:.85;mix-blend-mode:difference;}
+.cursor-ring{position:fixed;width:24px;height:24px;border:0.5px solid var(--ink);border-radius:50%;
+  top:0;left:0;transform:translate(-50%,-50%);pointer-events:none;z-index:998;opacity:.35;}
+
+/* ============ Topbar ============ */
+.topbar{position:fixed;top:0;left:0;right:0;z-index:50;padding:32px 56px;
+  display:flex;align-items:center;justify-content:space-between;color:var(--ink);
+  transition:color .4s, background .4s, border .4s;}
+.topbar.on-dark{color:#FFF;}
+.topbar .logo{font-family:var(--serif);font-weight:300;font-size:30px;letter-spacing:.32em;text-transform:lowercase;}
+.topbar .nav{display:flex;gap:42px;font-size:11px;letter-spacing:.32em;font-weight:300;}
+.topbar .nav a{position:relative;}
+.topbar .nav a::after{content:"";position:absolute;left:0;right:0;bottom:-6px;height:0.5px;background:currentColor;
+  transform:scaleX(0);transform-origin:right;transition:transform .8s cubic-bezier(.7,0,.15,1);}
+.topbar .nav a:hover::after{transform:scaleX(1);transform-origin:left;}
+.topbar .right{display:flex;align-items:center;gap:32px;font-size:11px;letter-spacing:.32em;}
+.topbar .booknow{padding:10px 22px;border:0.5px solid currentColor;font-weight:300;transition:background .4s,color .4s;}
+
+/* ============ Hero — full-bleed photo, small text overlay ============ */
+.hero{position:relative;height:100vh;min-height:840px;overflow:hidden;color:#fff;background:#000;}
+.hero .img{position:absolute;inset:0;
+  background:url('https://covo-ushimado.com/wp-content/uploads/2024/06/名称未設定のアートワーク14-scaled.webp') no-repeat center center/cover;}
+.hero .img::before{display:none;}
+@keyframes bob{50%{transform:translate(-50%,-12px);}}
+.hero .img::after{display:none;}
+.hero .ripple{position:absolute;left:0;right:0;top:62%;bottom:0;
+  background:repeating-linear-gradient(180deg,rgba(255,255,255,0) 0 16px,rgba(255,255,255,.04) 16px 17px);
+  mask-image:linear-gradient(180deg,#000,transparent 90%);}
+.hero .vignette{position:absolute;inset:0;
+  background:radial-gradient(ellipse at center,rgba(0,0,0,0) 50%,rgba(0,0,0,.18) 100%);}
+
+.hero-top{position:absolute;top:130px;left:56px;right:56px;display:flex;justify-content:space-between;align-items:start;}
+.hero-top .meta{font-family:var(--serif);font-style:italic;font-weight:300;font-size:14px;letter-spacing:.04em;opacity:.9;}
+.hero-top .stamp{font-size:10px;letter-spacing:.4em;line-height:2;text-align:right;opacity:.85;font-weight:300;}
+
+.hero-mid{position:absolute;left:56px;right:56px;top:50%;transform:translateY(-50%);text-align:center;}
+.hero-mid .eyebrow{display:inline-flex;align-items:center;gap:14px;font-size:10px;letter-spacing:.5em;font-weight:300;}
+.hero-mid .eyebrow::before,.hero-mid .eyebrow::after{content:"";width:32px;height:0.5px;background:currentColor;}
+.hero-mid h1{font-family:var(--serif);font-weight:300;font-size:110px;line-height:1.06;letter-spacing:.005em;margin-top:38px;}
+.hero-mid h1 em{font-style:italic;font-weight:300;}
+.hero-mid h1 .word{display:inline-block;overflow:hidden;}
+.hero-mid h1 .word > span{display:inline-block;transform:translateY(110%);
+  animation:rise 1.8s cubic-bezier(.2,.8,.2,1) forwards;}
+.hero-mid h1 .l2 > span{animation-delay:.25s;}
+@keyframes rise{to{transform:translateY(0);}}
+.hero-mid .jp{margin-top:36px;font-family:var(--jp);font-weight:300;font-size:13px;letter-spacing:.5em;opacity:.9;}
+
+.hero-bot{position:absolute;left:56px;right:56px;bottom:48px;display:flex;align-items:end;justify-content:space-between;}
+.hero-bot .scroll{display:flex;flex-direction:column;align-items:center;gap:10px;font-size:10px;letter-spacing:.4em;opacity:.85;}
+.hero-bot .scroll .line{width:1px;height:44px;background:currentColor;overflow:hidden;position:relative;opacity:.4;}
+.hero-bot .scroll .line::after{content:"";position:absolute;inset:0;background:#fff;animation:drip 2.8s ease-in-out infinite;}
+@keyframes drip{0%{transform:translateY(-100%);}55%{transform:translateY(0);}100%{transform:translateY(100%);}}
+.hero-bot .right{text-align:right;font-size:11px;letter-spacing:.4em;font-weight:300;opacity:.85;}
+
+/* ============ Intro (white) ============ */
+.intro{padding:200px 56px 200px;text-align:center;background:var(--white);}
+.intro .eyebrow{display:inline-flex;align-items:center;gap:14px;font-size:10px;letter-spacing:.5em;color:var(--ink-3);}
+.intro .eyebrow::before,.intro .eyebrow::after{content:"";width:32px;height:0.5px;background:currentColor;}
+.intro h2{font-family:var(--serif);font-weight:300;font-size:84px;line-height:1.15;margin-top:38px;letter-spacing:.005em;color:var(--ink);max-width:1000px;margin-left:auto;margin-right:auto;}
+.intro h2 em{font-style:italic;}
+.intro .jp{margin-top:48px;font-family:var(--jp);font-weight:300;font-size:18px;line-height:2.2;letter-spacing:.16em;color:var(--ink-2);}
+.intro p{margin-top:42px;font-family:var(--jp);font-weight:300;font-size:13px;line-height:2.4;color:var(--ink-3);max-width:680px;margin-left:auto;margin-right:auto;letter-spacing:.06em;}
+.intro .divider{width:1px;height:100px;background:var(--line);margin:80px auto 0;}
+
+/* ============ Section header style ============ */
+.sec-head{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:end;padding:0 0 60px;}
+.sec-head .l-side .num{font-family:var(--serif);font-style:italic;font-size:14px;color:var(--brass);letter-spacing:.4em;margin-bottom:18px;}
+.sec-head .l-side h2{font-family:var(--serif);font-weight:300;font-size:84px;line-height:1.0;color:var(--ink);letter-spacing:.005em;}
+.sec-head .l-side h2 em{font-style:italic;}
+.sec-head .l-side .jp{margin-top:18px;font-family:var(--jp);font-size:14px;letter-spacing:.16em;color:var(--ink-3);}
+.sec-head .r-side{padding-bottom:12px;}
+.sec-head .r-side p{font-family:var(--jp);font-weight:300;font-size:13px;line-height:2.3;color:var(--ink-3);max-width:380px;letter-spacing:.06em;justify-self:end;}
+.sec-head .r-side .more{margin-top:24px;font-family:var(--serif);font-style:italic;font-size:14px;color:var(--ink);display:inline-flex;align-items:center;gap:12px;border-bottom:0.5px solid var(--ink);padding-bottom:6px;}
+
+/* ============ Stay — full-bleed images, asymmetric ============ */
+.stay{padding:200px 56px 200px;background:var(--white);}
+
+.villa-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:24px;}
+.villa{position:relative;display:block;cursor:none;}
+.villa-a{grid-column:1/8;}
+.villa-b{grid-column:6/13;margin-top:240px;}
+.villa .ph{aspect-ratio:5/3.6;overflow:hidden;position:relative;}
+.villa .ph .inner{position:absolute;inset:0;transition:transform 1.4s cubic-bezier(.2,.8,.2,1);}
+.villa:hover .ph .inner{transform:scale(1.04);}
+.villa-a .ph .inner{background:url('https://covo-ushimado.com/wp-content/uploads/2024/06/名称未設定のアートワーク4-scaled.webp') no-repeat center center/cover;}
+.villa-a .ph .inner::before{display:none;}
+.villa-a .ph .inner::after{display:none;}
+.villa-b .ph .inner{background:url('https://covo-ushimado.com/wp-content/uploads/2024/06/名称未設定のアートワーク8-scaled.webp') no-repeat center center/cover;}
+.villa-b .ph .inner::before{display:none;}
+.villa-b .ph .inner::after{display:none;}
+
+.villa-meta{display:flex;justify-content:space-between;align-items:end;padding:28px 0 0 0;border-bottom:0.5px solid var(--line);padding-bottom:14px;}
+.villa-meta .info .no{font-family:var(--serif);font-style:italic;font-size:13px;letter-spacing:.4em;color:var(--brass);margin-bottom:10px;}
+.villa-meta .info .name{font-family:var(--jp);font-weight:300;font-size:32px;color:var(--ink);letter-spacing:.06em;}
+.villa-meta .info .name em{font-family:var(--serif);font-style:italic;font-weight:300;font-size:24px;color:var(--ink-3);display:block;margin-top:6px;letter-spacing:.04em;}
+.villa-meta .arrow{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--ink);}
+.villa-desc{margin-top:20px;font-family:var(--jp);font-size:13px;line-height:2.2;color:var(--ink-3);max-width:440px;letter-spacing:.06em;}
+
+/* ============ Quote ============ */
+.quote{padding:180px 56px;background:var(--white);text-align:center;border-top:0.5px solid var(--line-soft);border-bottom:0.5px solid var(--line-soft);}
+.quote .ql{font-family:var(--serif);font-weight:300;font-style:italic;font-size:54px;line-height:1.4;color:var(--ink);max-width:1000px;margin:0 auto;}
+.quote .ql .stroke{-webkit-text-stroke:0.6px var(--ink);color:transparent;font-style:normal;}
+.quote .jp{margin-top:32px;font-family:var(--jp);font-size:13px;letter-spacing:.5em;color:var(--ink-3);}
+
+/* ============ Sauna ============ */
+.sauna{background:#101010;color:#FBFAF7;position:relative;overflow:hidden;}
+.sauna-wrap{display:grid;grid-template-columns:6fr 6fr;min-height:780px;}
+.sauna-img{background:url('https://covo-ushimado.com/wp-content/uploads/2024/06/名称未設定のアートワーク-scaled.webp') no-repeat center center/cover;position:relative;overflow:hidden;}
+.sauna-img::before{display:none;}
+.sauna-img::after{display:none;}
+.sauna-img .glow{position:absolute;left:50%;top:55%;transform:translateX(-50%);width:280px;height:160px;
+  border-radius:50% / 80% 80% 20% 20%;background:radial-gradient(closest-side,#FFB063,rgba(255,176,99,0));filter:blur(10px);
+  animation:emberPulse 4.5s ease-in-out infinite;}
+@keyframes emberPulse{50%{opacity:.55;}}
+.sauna-img .steam{position:absolute;inset:0;
+  background:radial-gradient(40% 30% at 30% 60%,rgba(255,230,200,.09),transparent 80%),
+             radial-gradient(40% 30% at 70% 80%,rgba(255,230,200,.06),transparent 80%);
+  animation:smoke 16s ease-in-out infinite;}
+@keyframes smoke{50%{transform:translateY(-12px);}}
+
+.sauna-body{padding:160px 80px;display:flex;flex-direction:column;justify-content:center;}
+.sauna-body .num{font-family:var(--serif);font-style:italic;font-size:14px;color:#B89773;letter-spacing:.4em;margin-bottom:32px;}
+.sauna-body h2{font-family:var(--serif);font-weight:300;font-size:96px;line-height:1.0;}
+.sauna-body h2 em{font-style:italic;}
+.sauna-body h2 .stroke{-webkit-text-stroke:0.6px #FBFAF7;color:transparent;}
+.sauna-body .jp{margin-top:36px;font-family:var(--jp);font-weight:300;font-size:14px;letter-spacing:.16em;color:#E8E4D9;opacity:.9;}
+.sauna-body p{margin-top:24px;font-family:var(--jp);font-size:13px;line-height:2.2;color:#D0CCC0;letter-spacing:.06em;max-width:460px;}
+.sauna-body ul{margin-top:48px;list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:14px 32px;padding-top:24px;border-top:0.5px solid rgba(255,250,232,.18);max-width:460px;}
+.sauna-body li{font-family:var(--jp);font-size:13px;color:#E8E4D9;display:flex;justify-content:space-between;gap:16px;letter-spacing:.06em;}
+.sauna-body li em{font-family:var(--serif);font-style:italic;font-size:14px;color:#B89773;font-weight:300;letter-spacing:.04em;}
+
+/* ============ Dining mosaic ============ */
+.dining{padding:200px 56px;background:var(--white);}
+
+.dining-grid{display:grid;grid-template-columns:repeat(12,1fr);grid-auto-rows:140px;gap:24px;}
+.tile{position:relative;overflow:hidden;}
+.tile .ph{position:absolute;inset:0;transition:transform 1.4s cubic-bezier(.2,.8,.2,1);}
+.tile:hover .ph{transform:scale(1.04);}
+.tile::after{content:"";position:absolute;left:0;right:0;bottom:0;height:50%;
+  background:linear-gradient(180deg,rgba(0,0,0,0),rgba(15,12,8,.45));z-index:1;pointer-events:none;}
+.tile .meta{position:absolute;left:24px;bottom:22px;color:#FBFAF7;z-index:2;}
+.tile .no{font-family:var(--serif);font-style:italic;font-size:13px;letter-spacing:.4em;color:#D8C7A4;}
+.tile .nm{font-family:var(--jp);font-weight:300;font-size:24px;margin-top:8px;letter-spacing:.08em;}
+.tile .nm em{font-family:var(--serif);font-style:italic;font-weight:300;font-size:15px;display:block;margin-top:4px;opacity:.9;letter-spacing:.04em;}
+
+.tile.t1{grid-column:1/7;grid-row:1/5;}
+.tile.t2{grid-column:7/10;grid-row:1/3;}
+.tile.t3{grid-column:10/13;grid-row:1/4;}
+.tile.t4{grid-column:7/11;grid-row:3/5;}
+.tile.t5{grid-column:11/13;grid-row:4/5;}
+
+.tile.t1 .ph{background:url('https://covo-ushimado.com/wp-content/uploads/2024/06/LINE_ALBUM_写真_240618_13.webp') no-repeat center center/cover;}
+.tile.t1 .ph::before{display:none;}
+.tile.t1 .ph::after{display:none;}
+.tile.t2 .ph{background:url('https://covo-ushimado.com/wp-content/uploads/2024/06/20240610-DSC05245-scaled.webp') no-repeat center center/cover;}
+.tile.t3 .ph{background:url('https://covo-ushimado.com/wp-content/uploads/2024/06/名称未設定のアートワーク11-scaled.webp') no-repeat center center/cover;}
+.tile.t4 .ph{background:url('https://covo-ushimado.com/wp-content/uploads/2024/06/20240610-DSC05289-scaled.webp') no-repeat center center/cover;}
+.tile.t5 .ph{background:url('https://covo-ushimado.com/wp-content/uploads/2024/06/IMG_3511-scaled.webp') no-repeat center center/cover;}
+
+/* ============ Experience ============ */
+.exp{background:var(--paper);padding:200px 56px;border-top:0.5px solid var(--line-soft);border-bottom:0.5px solid var(--line-soft);}
+.exp-head{text-align:center;margin-bottom:120px;}
+.exp-head .num{font-family:var(--serif);font-style:italic;font-size:14px;color:var(--brass);letter-spacing:.4em;margin-bottom:18px;}
+.exp-head h2{font-family:var(--serif);font-weight:300;font-style:italic;font-size:96px;line-height:1.0;color:var(--ink);}
+.exp-head .jp{margin-top:24px;font-family:var(--jp);font-size:14px;letter-spacing:.16em;color:var(--ink-3);}
+
+.exp-row{display:grid;grid-template-columns:repeat(3,1fr);gap:48px;}
+.exp-item{cursor:none;display:block;}
+.exp-item .ph{aspect-ratio:4/5;overflow:hidden;position:relative;}
+.exp-item .ph div{position:absolute;inset:0;transition:transform 1.4s cubic-bezier(.2,.8,.2,1);}
+.exp-item:hover .ph div{transform:scale(1.04);}
+.exp-item:nth-child(2){transform:translateY(80px);}
+.exp-item .meta{margin-top:28px;padding-bottom:14px;border-bottom:0.5px solid var(--line);display:flex;justify-content:space-between;align-items:end;}
+.exp-item .no{font-family:var(--serif);font-style:italic;font-size:12px;color:var(--brass);letter-spacing:.4em;}
+.exp-item h3{font-family:var(--jp);font-weight:300;font-size:22px;letter-spacing:.06em;color:var(--ink);}
+.exp-item h3 em{display:block;font-family:var(--serif);font-style:italic;font-weight:300;font-size:14px;color:var(--ink-3);margin-bottom:4px;letter-spacing:.04em;}
+.exp-item .arrow{font-family:var(--serif);font-style:italic;font-size:14px;color:var(--ink);}
+.exp-item p{margin-top:20px;font-family:var(--jp);font-size:13px;line-height:2.2;color:var(--ink-3);letter-spacing:.06em;}
+
+/* ============ MORE SPOTS list (secondary) ============ */
+.exp-more{margin-top:200px;padding-top:80px;border-top:0.5px solid var(--line);}
+.exp-more-head{display:flex;align-items:end;justify-content:space-between;gap:40px;margin-bottom:48px;}
+.exp-more-head .num{font-family:var(--serif);font-style:italic;font-size:13px;letter-spacing:.4em;color:var(--brass);}
+.exp-more-head h3{font-family:var(--serif);font-weight:300;font-size:54px;line-height:1.0;color:var(--ink);letter-spacing:.005em;}
+.exp-more-head h3 em{font-style:italic;}
+.exp-more-list{list-style:none;}
+.exp-more-list li{border-top:0.5px solid var(--line);}
+.exp-more-list li:last-child{border-bottom:0.5px solid var(--line);}
+.exp-more-list li a{display:grid;grid-template-columns:80px 1fr 2fr 32px;gap:32px;align-items:baseline;
+  padding:28px 0;color:var(--ink);transition:color .35s ease,padding .5s cubic-bezier(.2,.8,.2,1);}
+.exp-more-list li a:hover{padding-left:18px;color:var(--brass);}
+.exp-more-list .no{font-family:var(--serif);font-style:italic;font-size:13px;letter-spacing:.4em;color:var(--brass);}
+.exp-more-list .nm{font-family:var(--jp);font-weight:300;font-size:24px;letter-spacing:.06em;}
+.exp-more-list .nm em{font-family:var(--serif);font-style:italic;font-weight:300;font-size:15px;color:var(--ink-3);margin-left:14px;}
+.exp-more-list .desc{font-family:var(--jp);font-size:13px;color:var(--ink-3);line-height:1.9;letter-spacing:.06em;}
+.exp-more-list .arr{font-family:var(--serif);font-style:italic;font-size:14px;text-align:right;
+  transition:transform .35s ease;}
+.exp-more-list li a:hover .arr{transform:translateX(6px);}
+.exp-source{margin-top:40px;font-family:var(--serif);font-style:italic;font-size:12px;color:var(--ink-4);text-align:right;letter-spacing:.04em;}
+.exp-source a{border-bottom:0.5px solid var(--ink-4);padding-bottom:2px;}
+.exp-source a:hover{color:var(--brass);border-color:var(--brass);}
+
+/* Venus Road — sandbar revealed at low tide: pale sky / shallow sea / wet sand */
+.exp .ph.e1 div{background:url('https://covo-ushimado.com/wp-content/uploads/2024/06/9430c30cfe2bc64ee47e1bd679682658-1024x768.webp') no-repeat center center/cover;position:relative;}
+.exp .ph.e1 div::before{display:none;}
+.exp .ph.e1 div::after{display:none;}
+/* Olive Garden — sea-facing olive grove */
+.exp .ph.e2 div{background:url('https://covo-ushimado.com/wp-content/uploads/2024/06/IMG_3511-scaled.webp') no-repeat center center/cover;position:relative;}
+.exp .ph.e2 div::after{display:none;}
+/* Maeshima — small green island floating in the inland sea */
+.exp .ph.e3 div{background:url('https://covo-ushimado.com/wp-content/uploads/2024/06/IMG_3512-scaled.webp') no-repeat center center/cover;position:relative;}
+.exp .ph.e3 div::before{display:none;}
+.exp .ph.e3 div::after{display:none;}
+
+/* ============ NEWS ============ */
+.news{padding:200px 56px 200px;background:var(--white);border-top:0.5px solid var(--line-soft);}
+.news-grid{display:grid;grid-template-columns:5fr 7fr;gap:96px;align-items:start;}
+
+.news-feature{display:block;cursor:none;}
+.news-feature .ph{aspect-ratio:5/4;overflow:hidden;position:relative;}
+.news-feature .ph div{position:absolute;inset:0;transition:transform 1.4s cubic-bezier(.2,.8,.2,1);
+  background:url('https://covo-ushimado.com/wp-content/uploads/2024/06/cc39790d2c3bbb50d66a62dca88f5ebc-scaled.webp') no-repeat center center/cover;}
+.news-feature .ph div::before{display:none;}
+.news-feature .ph div::after{display:none;}
+.news-feature:hover .ph div{transform:scale(1.04);}
+.news-feature .meta{display:flex;gap:24px;align-items:baseline;margin-top:28px;padding-bottom:14px;border-bottom:0.5px solid var(--line);}
+.news-feature .meta .date{font-family:var(--serif);font-style:italic;font-size:14px;letter-spacing:.3em;color:var(--brass);}
+.news-feature .meta .cat{font-family:var(--jp);font-size:11px;letter-spacing:.3em;color:var(--ink-3);}
+.news-feature .meta .feat{margin-left:auto;font-family:var(--serif);font-style:italic;font-size:12px;letter-spacing:.3em;color:var(--ink-3);}
+.news-feature h3{margin-top:20px;font-family:var(--jp);font-weight:300;font-size:26px;line-height:1.65;color:var(--ink);letter-spacing:.06em;}
+.news-feature h3 em{display:block;font-family:var(--serif);font-style:italic;font-weight:300;font-size:18px;color:var(--ink-3);margin-bottom:6px;letter-spacing:.04em;}
+.news-feature p{margin-top:16px;font-family:var(--jp);font-size:13px;line-height:2.0;color:var(--ink-3);letter-spacing:.06em;}
+.news-feature .feature-arrow{margin-top:24px;display:inline-flex;align-items:center;gap:12px;font-family:var(--serif);font-style:italic;font-size:14px;color:var(--ink);border-bottom:0.5px solid var(--ink);padding-bottom:4px;transition:color .35s,border-color .35s;}
+.news-feature:hover .feature-arrow{color:var(--brass);border-color:var(--brass);}
+
+.news-list{display:flex;flex-direction:column;padding-top:8px;}
+.news-list .news-list-head{display:flex;justify-content:space-between;align-items:baseline;padding-bottom:18px;}
+.news-list .news-list-head .ttl{font-family:var(--serif);font-style:italic;font-size:14px;color:var(--ink-3);letter-spacing:.06em;}
+.news-list .news-list-head .all{font-family:var(--serif);font-style:italic;font-size:14px;color:var(--ink);border-bottom:0.5px solid var(--ink);padding-bottom:4px;transition:color .35s,border-color .35s;}
+.news-list .news-list-head .all:hover{color:var(--brass);border-color:var(--brass);}
+.news-item{display:grid;grid-template-columns:160px 1fr 32px;gap:32px;
+  align-items:center;padding:30px 0;border-top:0.5px solid var(--line);
+  color:var(--ink);transition:color .35s ease,padding .5s cubic-bezier(.2,.8,.2,1);}
+.news-list .news-item:last-child{border-bottom:0.5px solid var(--line);}
+.news-item:hover{padding-left:18px;color:var(--brass);}
+.news-item .left{display:flex;flex-direction:column;gap:6px;}
+.news-item .date{font-family:var(--serif);font-style:italic;font-size:13px;letter-spacing:.3em;color:var(--brass);}
+.news-item .cat{font-family:var(--jp);font-size:11px;letter-spacing:.3em;color:var(--ink-3);font-weight:400;}
+.news-item .title{font-family:var(--jp);font-weight:300;font-size:18px;line-height:1.7;letter-spacing:.06em;color:inherit;}
+.news-item .title em{font-family:var(--serif);font-style:italic;font-weight:300;font-size:13px;color:var(--ink-3);margin-left:10px;letter-spacing:.04em;}
+.news-item .arr{font-family:var(--serif);font-style:italic;font-size:14px;text-align:right;transition:transform .35s;}
+.news-item:hover .arr{transform:translateX(6px);}
+
+/* ============ CTA ============ */
+.cta{padding:220px 56px;background:var(--white);text-align:center;border-top:0.5px solid var(--line-soft);}
+.cta .num{font-family:var(--serif);font-style:italic;font-size:14px;color:var(--brass);letter-spacing:.4em;}
+.cta h2{font-family:var(--serif);font-weight:300;font-size:128px;line-height:1.04;margin-top:32px;color:var(--ink);letter-spacing:.005em;}
+.cta h2 em{font-style:italic;}
+.cta h2 .stroke{-webkit-text-stroke:0.6px var(--ink);color:transparent;}
+.cta .jp{margin-top:42px;font-family:var(--jp);font-size:14px;letter-spacing:.16em;color:var(--ink-3);}
+.cta .btn-wrap{margin-top:64px;}
+.cta .btn{display:inline-flex;align-items:center;gap:20px;padding:22px 48px;border:0.5px solid var(--ink);
+  font-size:11px;letter-spacing:.4em;color:var(--ink);transition:background .4s,color .4s;}
+.cta .btn:hover{background:var(--ink);color:#FFF;}
+.cta .btn .arrow{font-family:var(--serif);font-style:italic;font-size:14px;letter-spacing:0;}
+
+/* ============ Footer ============ */
+footer{background:var(--white);color:var(--ink);padding:140px 56px 48px;border-top:0.5px solid var(--line);}
+.ftr{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:64px;align-items:start;}
+.ftr .logo{font-family:var(--serif);font-weight:300;font-size:60px;letter-spacing:.32em;text-transform:lowercase;}
+.ftr .logo small{display:block;font-family:var(--serif);font-style:italic;font-size:14px;letter-spacing:.2em;color:var(--brass);margin-top:18px;}
+.ftr .info{margin-top:32px;font-family:var(--jp);font-size:13px;line-height:2.2;color:var(--ink-3);letter-spacing:.06em;}
+.ftr .col h4{font-size:10px;letter-spacing:.4em;color:var(--ink-3);margin-bottom:24px;font-weight:400;}
+.ftr .col li{list-style:none;margin-bottom:12px;font-family:var(--sans);font-size:13px;font-weight:300;color:var(--ink-2);}
+.ftr .col a:hover{color:var(--brass);}
+.ftr-bot{display:flex;justify-content:space-between;align-items:center;margin-top:120px;padding-top:24px;border-top:0.5px solid var(--line);font-size:10px;letter-spacing:.4em;color:var(--ink-4);}
+
+/* ============ Reveal ============ */
+.reveal{opacity:0;transform:translateY(40px);transition:opacity 1.2s ease,transform 1.4s cubic-bezier(.2,.8,.2,1);}
+.reveal.in{opacity:1;transform:translateY(0);}
+
+/* ============ Sauna schedule block ============ */
+.sauna-schedule{background:#0A0A0A;color:#FBFAF7;padding:140px 56px 160px;
+  border-top:0.5px solid rgba(255,250,232,.12);}
+.sched-head{text-align:center;margin-bottom:96px;}
+.sched-head .num{font-family:var(--serif);font-style:italic;font-size:13px;letter-spacing:.4em;color:#B89773;margin-bottom:18px;}
+.sched-head h3{font-family:var(--serif);font-weight:300;font-style:italic;font-size:72px;line-height:1.0;color:#FBFAF7;letter-spacing:.005em;}
+.sched-head .jp{margin-top:22px;font-family:var(--jp);font-size:13px;letter-spacing:.5em;color:#D7D0BD;}
+
+.sched-grid{display:grid;grid-template-columns:1fr 1px 1fr;gap:0;max-width:1100px;margin:0 auto;}
+.sched-divider{background:rgba(255,250,232,.16);}
+
+.sched-col{padding:0 56px;}
+.sched-villa{display:flex;align-items:baseline;gap:18px;padding-bottom:32px;border-bottom:0.5px solid rgba(255,250,232,.18);margin-bottom:48px;}
+.sched-villa .lbl{font-family:var(--serif);font-style:italic;font-size:13px;letter-spacing:.4em;color:#B89773;}
+.sched-villa .big{font-family:var(--serif);font-weight:300;font-style:italic;font-size:86px;line-height:.85;color:#FBFAF7;}
+.sched-villa .name{font-family:var(--jp);font-weight:300;font-size:16px;letter-spacing:.12em;color:#D7D0BD;margin-left:auto;}
+.sched-villa .name em{font-family:var(--serif);font-style:italic;font-size:13px;color:#9B947F;display:block;margin-top:4px;letter-spacing:.06em;}
+
+.sched-block{margin-bottom:42px;}
+.sched-block:last-child{margin-bottom:0;}
+.sched-block .block-head{display:flex;justify-content:space-between;align-items:baseline;padding-bottom:14px;margin-bottom:18px;border-bottom:0.5px solid rgba(255,250,232,.12);}
+.sched-block .kind{font-family:var(--serif);font-weight:300;font-style:italic;font-size:24px;color:#FBFAF7;letter-spacing:.04em;}
+.sched-block .dur{font-family:var(--sans);font-size:10px;letter-spacing:.3em;color:#9B947F;font-weight:300;}
+.sched-block ul{list-style:none;display:flex;flex-direction:column;gap:14px;}
+.sched-block li{display:grid;grid-template-columns:32px 1fr;align-items:baseline;gap:14px;}
+.sched-block .i{font-family:var(--serif);font-style:italic;font-size:14px;color:#B89773;letter-spacing:.04em;}
+.sched-block .t{font-family:var(--serif);font-weight:300;font-size:26px;letter-spacing:.04em;color:#FBFAF7;
+  font-variant-numeric:tabular-nums;}
+.sched-block .t .sep{color:#7A7464;margin:0 10px;font-style:italic;font-weight:300;}
+
+.sched-notes{max-width:1100px;margin:96px auto 0;padding-top:48px;border-top:0.5px solid rgba(255,250,232,.16);}
+.sched-notes h4{font-family:var(--serif);font-style:italic;font-size:13px;letter-spacing:.4em;color:#B89773;margin-bottom:24px;}
+.sched-notes ul{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:18px 64px;}
+.sched-notes li{font-family:var(--jp);font-size:13px;line-height:1.95;color:#C9C2AE;letter-spacing:.06em;display:flex;gap:14px;}
+.sched-notes li::before{content:"";flex:none;width:14px;height:0.5px;background:#7A7464;margin-top:.95em;}
+
+/* ============ Fixed Reservation FAB (bottom-left) ============ */
+.reserve-fab{position:fixed;left:28px;bottom:28px;z-index:60;
+  display:inline-flex;align-items:center;gap:14px;
+  padding:18px 26px 18px 22px;background:var(--ink);color:#FFF;
+  border-radius:60px;font-family:var(--jp);font-size:12px;font-weight:400;letter-spacing:.22em;
+  box-shadow:0 12px 32px -10px rgba(0,0,0,.35);
+  opacity:0;transform:translateY(20px);pointer-events:none;
+  transition:opacity .8s ease,transform .8s cubic-bezier(.2,.8,.2,1),background .4s,color .4s,padding .35s;}
+.reserve-fab.show{opacity:1;transform:translateY(0);pointer-events:auto;}
+.reserve-fab .pulse{position:relative;width:8px;height:8px;border-radius:50%;background:var(--brass);
+  box-shadow:0 0 0 0 rgba(157,132,88,.6);animation:pulse 2.4s infinite;}
+@keyframes pulse{
+  0%{box-shadow:0 0 0 0 rgba(157,132,88,.55);}
+  70%{box-shadow:0 0 0 10px rgba(157,132,88,0);}
+  100%{box-shadow:0 0 0 0 rgba(157,132,88,0);}
+}
+.reserve-fab .label{display:inline-flex;flex-direction:column;line-height:1.15;gap:2px;}
+.reserve-fab .label .jp{font-family:var(--jp);font-size:13px;font-weight:400;letter-spacing:.22em;color:#FFF;}
+.reserve-fab .label .en{font-family:var(--serif);font-style:italic;font-size:10.5px;letter-spacing:.28em;color:#D9CFB8;font-weight:300;}
+.reserve-fab .arrow{font-family:var(--serif);font-style:italic;font-size:15px;letter-spacing:0;color:#D9CFB8;
+  transition:transform .35s ease;}
+.reserve-fab:hover{background:var(--brass);padding:18px 32px 18px 22px;}
+.reserve-fab:hover .arrow{transform:translate(3px,-3px);color:#FFF;}
+.reserve-fab:hover .label .en{color:#FFF;}
+.reserve-fab:hover .pulse{background:#FFF;box-shadow:none;animation:none;}

@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<title>covo ushimado — white mock</title>
+<meta name="viewport" content="width=1440" />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Noto+Serif+JP:wght@200;300;400;500&family=Inter:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --white:#FFFFFF;
+    --paper:#FBFAF7;
+    --offwhite:#F4F2EC;
+    --line:#E3E0D7;
+    --line-soft:#EFEDE6;
+    --ink:#1A1A1A;
+    --ink-2:#3A3A36;
+    --ink-3:#7A7A74;
+    --ink-4:#B4B2AB;
+    --brass:#957C58;
+    --serif:'Cormorant Garamond','Noto Serif JP', serif;
+    --jp:'Noto Serif JP', serif;
+    --sans:'Inter', system-ui, sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{background:var(--white);color:var(--ink);font-family:var(--sans);overflow-x:hidden;-webkit-font-smoothing:antialiased;font-weight:300;}
+  body{cursor:none;}
+  a{color:inherit;text-decoration:none;}
+  img{display:block;max-width:100%;}
+
+  /* ============ Cursor ============ */
+  .cursor{position:fixed;width:5px;height:5px;border-radius:50%;background:var(--ink);
+    top:0;left:0;transform:translate(-50%,-50%);pointer-events:none;z-index:999;
+    transition:width .4s ease,height .4s ease,background .25s,opacity .25s;}
+  .cursor.big{width:48px;height:48px;background:var(--ink);opacity:.85;mix-blend-mode:difference;}
+  .cursor-ring{position:fixed;width:24px;height:24px;border:0.5px solid var(--ink);border-radius:50%;
+    top:0;left:0;transform:translate(-50%,-50%);pointer-events:none;z-index:998;opacity:.35;}
+
+  /* ============ Topbar ============ */
+  .topbar{position:fixed;top:0;left:0;right:0;z-index:50;padding:32px 56px;
+    display:flex;align-items:center;justify-content:space-between;color:var(--ink);
+    transition:color .4s, background .4s, border .4s;}
+  .topbar.on-dark{color:#FFF;}
+  .topbar .logo{font-family:var(--serif);font-weight:300;font-size:30px;letter-spacing:.32em;text-transform:lowercase;}
+  .topbar .nav{display:flex;gap:42px;font-size:11px;letter-spacing:.32em;font-weight:300;}
+  .topbar .nav a{position:relative;}
+  .topbar .nav a::after{content:"";position:absolute;left:0;right:0;bottom:-6px;height:0.5px;background:currentColor;
+    transform:scaleX(0);transform-origin:right;transition:transform .8s cubic-bezier(.7,0,.15,1);}
+  .topbar .nav a:hover::after{transform:scaleX(1);transform-origin:left;}
+  .topbar .right{display:flex;align-items:center;gap:32px;font-size:11px;letter-spacing:.32em;}
+  .topbar .booknow{padding:10px 22px;border:0.5px solid currentColor;font-weight:300;transition:background .4s,color .4s;}
+
+  /* ============ Hero — full-bleed photo, small text overlay ============ */
+  .hero{position:relative;height:100vh;min-height:840px;overflow:hidden;color:#fff;}
+  .hero .img{position:absolute;inset:0;
+    background:linear-gradient(180deg, #DCD3C2 0%, #C7BCA6 22%, #97A1A0 50%, #5F6F73 78%, #3A4347 100%);}
+  .hero .img::before{content:"";position:absolute;left:50%;top:30%;transform:translateX(-50%);width:280px;height:280px;border-radius:50%;
+    background:radial-gradient(closest-side,rgba(255,238,205,.9),rgba(255,238,205,0));mix-blend-mode:screen;animation:bob 12s ease-in-out infinite;}
+  @keyframes bob{50%{transform:translate(-50%,-12px);}}
+  .hero .img::after{content:"";position:absolute;left:0;right:0;top:62%;height:1px;background:rgba(255,250,235,.4);}
+  .hero .ripple{position:absolute;left:0;right:0;top:62%;bottom:0;
+    background:repeating-linear-gradient(180deg,rgba(255,255,255,0) 0 16px,rgba(255,255,255,.04) 16px 17px);
+    mask-image:linear-gradient(180deg,#000,transparent 90%);}
+  .hero .vignette{position:absolute;inset:0;
+    background:radial-gradient(ellipse at center,rgba(0,0,0,0) 50%,rgba(0,0,0,.18) 100%);}
+
+  .hero-top{position:absolute;top:130px;left:56px;right:56px;display:flex;justify-content:space-between;align-items:start;}
+  .hero-top .meta{font-family:var(--serif);font-style:italic;font-weight:300;font-size:14px;letter-spacing:.04em;opacity:.9;}
+  .hero-top .stamp{font-size:10px;letter-spacing:.4em;line-height:2;text-align:right;opacity:.85;font-weight:300;}
+
+  .hero-mid{position:absolute;left:56px;right:56px;top:50%;transform:translateY(-50%);text-align:center;}
+  .hero-mid .eyebrow{display:inline-flex;align-items:center;gap:14px;font-size:10px;letter-spacing:.5em;font-weight:300;}
+  .hero-mid .eyebrow::before,.hero-mid .eyebrow::after{content:"";width:32px;height:0.5px;background:currentColor;}
+  .hero-mid h1{font-family:var(--serif);font-weight:300;font-size:110px;line-height:1.06;letter-spacing:.005em;margin-top:38px;}
+  .hero-mid h1 em{font-style:italic;font-weight:300;}
+  .hero-mid h1 .word{display:inline-block;overflow:hidden;}
+  .hero-mid h1 .word > span{display:inline-block;transform:translateY(110%);
+    animation:rise 1.8s cubic-bezier(.2,.8,.2,1) forwards;}
+  .hero-mid h1 .l2 > span{animation-delay:.25s;}
+  @keyframes rise{to{transform:translateY(0);}}
+  .hero-mid .jp{margin-top:36px;font-family:var(--jp);font-weight:300;font-size:13px;letter-spacing:.5em;opacity:.9;}
+
+  .hero-bot{position:absolute;left:56px;right:56px;bottom:48px;display:flex;align-items:end;justify-content:space-between;}
+  .hero-bot .scroll{display:flex;flex-direction:column;align-items:center;gap:10px;font-size:10px;letter-spacing:.4em;opacity:.85;}
+  .hero-bot .scroll .line{width:1px;height:44px;background:currentColor;overflow:hidden;position:relative;opacity:.4;}
+  .hero-bot .scroll .line::after{content:"";position:absolute;inset:0;background:#fff;animation:drip 2.8s ease-in-out infinite;}
+  @keyframes drip{0%{transform:translateY(-100%);}55%{transform:translateY(0);}100%{transform:translateY(100%);}}
+  .hero-bot .right{text-align:right;font-size:11px;letter-spacing:.4em;font-weight:300;opacity:.85;}
+
+  /* ============ Intro (white) ============ */
+  .intro{padding:200px 56px 200px;text-align:center;background:var(--white);}
+  .intro .eyebrow{display:inline-flex;align-items:center;gap:14px;font-size:10px;letter-spacing:.5em;color:var(--ink-3);}
+  .intro .eyebrow::before,.intro .eyebrow::after{content:"";width:32px;height:0.5px;background:currentColor;}
+  .intro h2{font-family:var(--serif);font-weight:300;font-size:84px;line-height:1.15;margin-top:38px;letter-spacing:.005em;color:var(--ink);max-width:1000px;margin-left:auto;margin-right:auto;}
+  .intro h2 em{font-style:italic;}
+  .intro .jp{margin-top:48px;font-family:var(--jp);font-weight:300;font-size:18px;line-height:2.2;letter-spacing:.16em;color:var(--ink-2);}
+  .intro p{margin-top:42px;font-family:var(--jp);font-weight:300;font-size:13px;line-height:2.4;color:var(--ink-3);max-width:680px;margin-left:auto;margin-right:auto;letter-spacing:.06em;}
+  .intro .divider{width:1px;height:100px;background:var(--line);margin:80px auto 0;}
+
+  /* ============ Section header style ============ */
+  .sec-head{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:end;padding:0 0 60px;}
+  .sec-head .l-side .num{font-family:var(--serif);font-style:italic;font-size:14px;color:var(--brass);letter-spacing:.4em;margin-bottom:18px;}
+  .sec-head .l-side h2{font-family:var(--serif);font-weight:300;font-size:84px;line-height:1.0;color:var(--ink);letter-spacing:.005em;}
+  .sec-head .l-side h2 em{font-style:italic;}
+  .sec-head .l-side .jp{margin-top:18px;font-family:var(--jp);font-size:14px;letter-spacing:.16em;color:var(--ink-3);}
+  .sec-head .r-side{padding-bottom:12px;}
+  .sec-head .r-side p{font-family:var(--jp);font-weight:300;font-size:13px;line-height:2.3;color:var(--ink-3);max-width:380px;letter-spacing:.06em;justify-self:end;}
+  .sec-head .r-side .more{margin-top:24px;font-family:var(--serif);font-style:italic;font-size:14px;color:var(--ink);display:inline-flex;align-items:center;gap:12px;border-bottom:0.5px solid var(--ink);padding-bottom:6px;}
+
+  /* ============ Stay — full-bleed images, asymmetric ============ */
+  .stay{padding:200px 56px 200px;background:var(--white);}
+
+  .villa-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:24px;}
+  .villa{position:relative;display:block;cursor:none;}
+  .villa-a{grid-column:1/8;}
+  .villa-b{grid-column:6/13;margin-top:240px;}
+  .villa .ph{aspect-ratio:5/3.6;overflow:hidden;position:relative;}
+  .villa .ph .inner{position:absolute;inset:0;transition:transform 1.4s cubic-bezier(.2,.8,.2,1);}
+  .villa:hover .ph .inner{transform:scale(1.04);}
+  .villa-a .ph .inner{background:linear-gradient(170deg,#F0EAD9,#D3C9B2 50%,#7E7460 100%);}
+  .villa-a .ph .inner::before{content:"";position:absolute;left:14%;top:14%;width:72%;height:62%;background:rgba(255,250,238,.55);}
+  .villa-a .ph .inner::after{content:"";position:absolute;left:14%;top:40%;width:72%;height:36%;background:linear-gradient(180deg,rgba(141,128,104,0),rgba(78,68,52,.4));}
+  .villa-b .ph .inner{background:linear-gradient(170deg,#D9D8CE,#7C8987 45%,#3F4A4B 100%);}
+  .villa-b .ph .inner::before{content:"";position:absolute;left:0;right:0;top:54%;height:1px;background:rgba(255,250,232,.4);}
+  .villa-b .ph .inner::after{content:"";position:absolute;left:50%;top:22%;transform:translateX(-50%);width:200px;height:200px;border-radius:50%;background:radial-gradient(closest-side,rgba(240,230,200,.7),transparent);mix-blend-mode:screen;}
+
+  .villa-meta{display:flex;justify-content:space-between;align-items:end;padding:28px 0 0 0;border-bottom:0.5px solid var(--line);padding-bottom:14px;}
+  .villa-meta .info .no{font-family:var(--serif);font-style:italic;font-size:13px;letter-spacing:.4em;color:var(--brass);margin-bottom:10px;}
+  .villa-meta .info .name{font-family:var(--jp);font-weight:300;font-size:32px;color:var(--ink);letter-spacing:.06em;}
+  .villa-meta .info .name em{font-family:var(--serif);font-style:italic;font-weight:300;font-size:24px;color:var(--ink-3);display:block;margin-top:6px;letter-spacing:.04em;}
+  .villa-meta .arrow{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--ink);}
+  .villa-desc{margin-top:20px;font-family:var(--jp);font-size:13px;line-height:2.2;color:var(--ink-3);max-width:440px;letter-spacing:.06em;}
+
+  /* ============ Quote ============ */
+  .quote{padding:180px 56px;background:var(--white);text-align:center;border-top:0.5px solid var(--line-soft);border-bottom:0.5px solid var(--line-soft);}
+  .quote .ql{font-family:var(--serif);font-weight:300;font-style:italic;font-size:54px;line-height:1.4;color:var(--ink);max-width:1000px;margin:0 auto;}
+  .quote .ql .stroke{-webkit-text-stroke:0.6px var(--ink);color:transparent;font-style:normal;}
+  .quote .jp{margin-top:32px;font-family:var(--jp);font-size:13px;letter-spacing:.5em;color:var(--ink-3);}
+
+  /* ============ Sauna ============ */
+  .sauna{background:#101010;color:#FBFAF7;position:relative;overflow:hidden;}
+  .sauna-wrap{display:grid;grid-template-columns:6fr 6fr;min-height:780px;}
+  .sauna-img{background:linear-gradient(170deg,#5A4732 0%,#2A1F15 60%,#0F0C08 100%);position:relative;overflow:hidden;}
+  .sauna-img::before{content:"";position:absolute;inset:0;
+    background:repeating-linear-gradient(90deg,
+      rgba(50,30,12,0) 0 38px, rgba(0,0,0,.16) 38px 39px,
+      rgba(0,0,0,0) 39px 76px, rgba(255,210,160,.04) 76px 77px);}
+  .sauna-img::after{content:"";position:absolute;top:-20%;right:-12%;width:65%;height:55%;border-radius:50%;
+    background:radial-gradient(closest-side,rgba(255,200,140,.48),transparent);}
+  .sauna-img .glow{position:absolute;left:50%;top:55%;transform:translateX(-50%);width:280px;height:160px;
+    border-radius:50% / 80% 80% 20% 20%;background:radial-gradient(closest-side,#FFB063,rgba(255,176,99,0));filter:blur(10px);
+    animation:emberPulse 4.5s ease-in-out infinite;}
+  @keyframes emberPulse{50%{opacity:.55;}}
+  .sauna-img .steam{position:absolute;inset:0;
+    background:radial-gradient(40% 30% at 30% 60%,rgba(255,230,200,.09),transparent 80%),
+               radial-gradient(40% 30% at 70% 80%,rgba(255,230,200,.06),transparent 80%);
+    animation:smoke 16s ease-in-out infinite;}
+  @keyframes smoke{50%{transform:translateY(-12px);}}
+
+  .sauna-body{padding:160px 80px;display:flex;flex-direction:column;justify-content:center;}
+  .sauna-body .num{font-family:var(--serif);font-style:italic;font-size:14px;color:#B89773;letter-spacing:.4em;margin-bottom:32px;}
+  .sauna-body h2{font-family:var(--serif);font-weight:300;font-size:96px;line-height:1.0;}
+  .sauna-body h2 em{font-style:italic;}
+  .sauna-body h2 .stroke{-webkit-text-stroke:0.6px #FBFAF7;color:transparent;}
+  .sauna-body .jp{margin-top:36px;font-family:var(--jp);font-weight:300;font-size:14px;letter-spacing:.16em;color:#E8E4D9;opacity:.9;}
+  .sauna-body p{margin-top:24px;font-family:var(--jp);font-size:13px;line-height:2.2;color:#D0CCC0;letter-spacing:.06em;max-width:460px;}
+  .sauna-body ul{margin-top:48px;list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:14px 32px;padding-top:24px;border-top:0.5px solid rgba(255,250,232,.18);max-width:460px;}
+  .sauna-body li{font-family:var(--jp);font-size:13px;color:#E8E4D9;display:flex;justify-content:space-between;gap:16px;letter-spacing:.06em;}
+  .sauna-body li em{font-family:var(--serif);font-style:italic;font-size:14px;color:#B89773;font-weight:300;letter-spacing:.04em;}
+
+  /* ============ Dining mosaic ============ */
+  .dining{padding:200px 56px;background:var(--white);}
+
+  .dining-grid{display:grid;grid-template-columns:repeat(12,1fr);grid-auto-rows:140px;gap:24px;}
+  .tile{position:relative;overflow:hidden;}
+  .tile .ph{position:absolute;inset:0;transition:transform 1.4s cubic-bezier(.2,.8,.2,1);}
+  .tile:hover .ph{transform:scale(1.04);}
+  .tile::after{content:"";position:absolute;left:0;right:0;bottom:0;height:50%;
+    background:linear-gradient(180deg,rgba(0,0,0,0),rgba(15,12,8,.45));z-index:1;pointer-events:none;}
+  .tile .meta{position:absolute;left:24px;bottom:22px;color:#FBFAF7;z-index:2;}
+  .tile .no{font-family:var(--serif);font-style:italic;font-size:13px;letter-spacing:.4em;color:#D8C7A4;}
+  .tile .nm{font-family:var(--jp);font-weight:300;font-size:24px;margin-top:8px;letter-spacing:.08em;}
+  .tile .nm em{font-family:var(--serif);font-style:italic;font-weight:300;font-size:15px;display:block;margin-top:4px;opacity:.9;letter-spacing:.04em;}
+
+  .tile.t1{grid-column:1/7;grid-row:1/5;}
+  .tile.t2{grid-column:7/10;grid-row:1/3;}
+  .tile.t3{grid-column:10/13;grid-row:1/4;}
+  .tile.t4{grid-column:7/11;grid-row:3/5;}
+  .tile.t5{grid-column:11/13;grid-row:4/5;}
+
+  .tile.t1 .ph{background:linear-gradient(170deg,#F0EAD9 0%,#C7B89C 50%,#7E6F55 100%);}
+  .tile.t1 .ph::before{content:"";position:absolute;left:50%;top:42%;transform:translate(-50%,-50%);width:260px;height:260px;border-radius:50%;background:#FBF6E6;}
+  .tile.t1 .ph::after{content:"";position:absolute;left:50%;top:42%;transform:translate(-50%,-50%);width:120px;height:120px;border-radius:50%;background:#8C7558;}
+  .tile.t2 .ph{background:linear-gradient(180deg,#DEDFCB 0%,#8C9A82 100%);}
+  .tile.t3 .ph{background:linear-gradient(170deg,#E8DBC5 0%,#B89C76 60%,#6A5538 100%);}
+  .tile.t4 .ph{background:linear-gradient(170deg,#CCD3D2 0%,#728483 60%,#3C4A4D 100%);}
+  .tile.t5 .ph{background:linear-gradient(180deg,#D3C7AB,#7B6E50);}
+
+  /* ============ Experience ============ */
+  .exp{background:var(--paper);padding:200px 56px;border-top:0.5px solid var(--line-soft);border-bottom:0.5px solid var(--line-soft);}
+  .exp-head{text-align:center;margin-bottom:120px;}
+  .exp-head .num{font-family:var(--serif);font-style:italic;font-size:14px;color:var(--brass);letter-spacing:.4em;margin-bottom:18px;}
+  .exp-head h2{font-family:var(--serif);font-weight:300;font-style:italic;font-size:96px;line-height:1.0;color:var(--ink);}
+  .exp-head .jp{margin-top:24px;font-family:var(--jp);font-size:14px;letter-spacing:.16em;color:var(--ink-3);}
+
+  .exp-row{display:grid;grid-template-columns:repeat(3,1fr);gap:48px;}
+  .exp-item{cursor:none;display:block;}
+  .exp-item .ph{aspect-ratio:4/5;overflow:hidden;position:relative;}
+  .exp-item .ph div{position:absolute;inset:0;transition:transform 1.4s cubic-bezier(.2,.8,.2,1);}
+  .exp-item:hover .ph div{transform:scale(1.04);}
+  .exp-item:nth-child(2){transform:translateY(80px);}
+  .exp-item .meta{margin-top:28px;padding-bottom:14px;border-bottom:0.5px solid var(--line);display:flex;justify-content:space-between;align-items:end;}
+  .exp-item .no{font-family:var(--serif);font-style:italic;font-size:12px;color:var(--brass);letter-spacing:.4em;}
+  .exp-item h3{font-family:var(--jp);font-weight:300;font-size:22px;letter-spacing:.06em;color:var(--ink);}
+  .exp-item h3 em{display:block;font-family:var(--serif);font-style:italic;font-weight:300;font-size:14px;color:var(--ink-3);margin-bottom:4px;letter-spacing:.04em;}
+  .exp-item .arrow{font-family:var(--serif);font-style:italic;font-size:14px;color:var(--ink);}
+  .exp-item p{margin-top:20px;font-family:var(--jp);font-size:13px;line-height:2.2;color:var(--ink-3);letter-spacing:.06em;}
+
+  /* ============ MORE SPOTS list (secondary) ============ */
+  .exp-more{margin-top:200px;padding-top:80px;border-top:0.5px solid var(--line);}
+  .exp-more-head{display:flex;align-items:end;justify-content:space-between;gap:40px;margin-bottom:48px;}
+  .exp-more-head .num{font-family:var(--serif);font-style:italic;font-size:13px;letter-spacing:.4em;color:var(--brass);}
+  .exp-more-head h3{font-family:var(--serif);font-weight:300;font-size:54px;line-height:1.0;color:var(--ink);letter-spacing:.005em;}
+  .exp-more-head h3 em{font-style:italic;}
+  .exp-more-list{list-style:none;}
+  .exp-more-list li{border-top:0.5px solid var(--line);}
+  .exp-more-list li:last-child{border-bottom:0.5px solid var(--line);}
+  .exp-more-list li a{display:grid;grid-template-columns:80px 1fr 2fr 32px;gap:32px;align-items:baseline;
+    padding:28px 0;color:var(--ink);transition:color .35s ease,padding .5s cubic-bezier(.2,.8,.2,1);}
+  .exp-more-list li a:hover{padding-left:18px;color:var(--brass);}
+  .exp-more-list .no{font-family:var(--serif);font-style:italic;font-size:13px;letter-spacing:.4em;color:var(--brass);}
+  .exp-more-list .nm{font-family:var(--jp);font-weight:300;font-size:24px;letter-spacing:.06em;}
+  .exp-more-list .nm em{font-family:var(--serif);font-style:italic;font-weight:300;font-size:15px;color:var(--ink-3);margin-left:14px;}
+  .exp-more-list .desc{font-family:var(--jp);font-size:13px;color:var(--ink-3);line-height:1.9;letter-spacing:.06em;}
+  .exp-more-list .arr{font-family:var(--serif);font-style:italic;font-size:14px;text-align:right;
+    transition:transform .35s ease;}
+  .exp-more-list li a:hover .arr{transform:translateX(6px);}
+  .exp-source{margin-top:40px;font-family:var(--serif);font-style:italic;font-size:12px;color:var(--ink-4);text-align:right;letter-spacing:.04em;}
+  .exp-source a{border-bottom:0.5px solid var(--ink-4);padding-bottom:2px;}
+  .exp-source a:hover{color:var(--brass);border-color:var(--brass);}
+
+  /* Venus Road — sandbar revealed at low tide: pale sky / shallow sea / wet sand */
+  .exp .ph.e1 div{background:linear-gradient(180deg,#E6E2D6 0%,#C9CFC9 38%,#7E8F90 62%,#C4B89A 86%,#9C8E72 100%);position:relative;}
+  .exp .ph.e1 div::before{content:"";position:absolute;left:-10%;right:-10%;top:55%;height:6%;
+    background:linear-gradient(90deg,transparent,#D7CAA8 22%,#D7CAA8 78%,transparent);}
+  .exp .ph.e1 div::after{content:"";position:absolute;left:0;right:0;top:48%;height:1px;background:rgba(255,250,235,.55);}
+  /* Olive Garden — sea-facing olive grove */
+  .exp .ph.e2 div{background:linear-gradient(170deg,#E1DDC5 0%,#A6AE85 40%,#7E8E5E 70%,#3F5161 100%);position:relative;}
+  .exp .ph.e2 div::after{content:"";position:absolute;left:0;right:0;top:72%;height:1px;background:rgba(255,250,235,.4);}
+  /* Maeshima — small green island floating in the inland sea */
+  .exp .ph.e3 div{background:linear-gradient(180deg,#DEE3DC 0%,#B6C3BD 30%,#7A9491 56%,#3F595A 100%);position:relative;}
+  .exp .ph.e3 div::before{content:"";position:absolute;left:10%;right:10%;top:48%;height:13%;
+    background:#3D5450;border-radius:50% 50% 6% 6% / 100% 100% 6% 6%;opacity:.92;}
+  .exp .ph.e3 div::after{content:"";position:absolute;left:0;right:0;top:60%;height:1px;background:rgba(255,250,235,.5);}
+
+  /* ============ NEWS ============ */
+  .news{padding:200px 56px 200px;background:var(--white);border-top:0.5px solid var(--line-soft);}
+  .news-grid{display:grid;grid-template-columns:5fr 7fr;gap:96px;align-items:start;}
+
+  .news-feature{display:block;cursor:none;}
+  .news-feature .ph{aspect-ratio:5/4;overflow:hidden;position:relative;}
+  .news-feature .ph div{position:absolute;inset:0;transition:transform 1.4s cubic-bezier(.2,.8,.2,1);
+    background:linear-gradient(170deg,#E8DECC 0%,#B5BFBC 45%,#677B7E 100%);}
+  .news-feature .ph div::before{content:"";position:absolute;left:50%;top:30%;transform:translateX(-50%);width:200px;height:200px;border-radius:50%;
+    background:radial-gradient(closest-side,rgba(255,238,205,.7),rgba(255,238,205,0));mix-blend-mode:screen;}
+  .news-feature .ph div::after{content:"";position:absolute;left:0;right:0;top:58%;height:1px;background:rgba(255,250,235,.45);}
+  .news-feature:hover .ph div{transform:scale(1.04);}
+  .news-feature .meta{display:flex;gap:24px;align-items:baseline;margin-top:28px;padding-bottom:14px;border-bottom:0.5px solid var(--line);}
+  .news-feature .meta .date{font-family:var(--serif);font-style:italic;font-size:14px;letter-spacing:.3em;color:var(--brass);}
+  .news-feature .meta .cat{font-family:var(--jp);font-size:11px;letter-spacing:.3em;color:var(--ink-3);}
+  .news-feature .meta .feat{margin-left:auto;font-family:var(--serif);font-style:italic;font-size:12px;letter-spacing:.3em;color:var(--ink-3);}
+  .news-feature h3{margin-top:20px;font-family:var(--jp);font-weight:300;font-size:26px;line-height:1.65;color:var(--ink);letter-spacing:.06em;}
+  .news-feature h3 em{display:block;font-family:var(--serif);font-style:italic;font-weight:300;font-size:18px;color:var(--ink-3);margin-bottom:6px;letter-spacing:.04em;}
+  .news-feature p{margin-top:16px;font-family:var(--jp);font-size:13px;line-height:2.0;color:var(--ink-3);letter-spacing:.06em;}
+  .news-feature .feature-arrow{margin-top:24px;display:inline-flex;align-items:center;gap:12px;font-family:var(--serif);font-style:italic;font-size:14px;color:var(--ink);border-bottom:0.5px solid var(--ink);padding-bottom:4px;transition:color .35s,border-color .35s;}
+  .news-feature:hover .feature-arrow{color:var(--brass);border-color:var(--brass);}
+
+  .news-list{display:flex;flex-direction:column;padding-top:8px;}
+  .news-list .news-list-head{display:flex;justify-content:space-between;align-items:baseline;padding-bottom:18px;}
+  .news-list .news-list-head .ttl{font-family:var(--serif);font-style:italic;font-size:14px;color:var(--ink-3);letter-spacing:.06em;}
+  .news-list .news-list-head .all{font-family:var(--serif);font-style:italic;font-size:14px;color:var(--ink);border-bottom:0.5px solid var(--ink);padding-bottom:4px;transition:color .35s,border-color .35s;}
+  .news-list .news-list-head .all:hover{color:var(--brass);border-color:var(--brass);}
+  .news-item{display:grid;grid-template-columns:160px 1fr 32px;gap:32px;
+    align-items:center;padding:30px 0;border-top:0.5px solid var(--line);
+    color:var(--ink);transition:color .35s ease,padding .5s cubic-bezier(.2,.8,.2,1);}
+  .news-list .news-item:last-child{border-bottom:0.5px solid var(--line);}
+  .news-item:hover{padding-left:18px;color:var(--brass);}
+  .news-item .left{display:flex;flex-direction:column;gap:6px;}
+  .news-item .date{font-family:var(--serif);font-style:italic;font-size:13px;letter-spacing:.3em;color:var(--brass);}
+  .news-item .cat{font-family:var(--jp);font-size:11px;letter-spacing:.3em;color:var(--ink-3);font-weight:400;}
+  .news-item .title{font-family:var(--jp);font-weight:300;font-size:18px;line-height:1.7;letter-spacing:.06em;color:inherit;}
+  .news-item .title em{font-family:var(--serif);font-style:italic;font-weight:300;font-size:13px;color:var(--ink-3);margin-left:10px;letter-spacing:.04em;}
+  .news-item .arr{font-family:var(--serif);font-style:italic;font-size:14px;text-align:right;transition:transform .35s;}
+  .news-item:hover .arr{transform:translateX(6px);}
+
+  /* ============ CTA ============ */
+  .cta{padding:220px 56px;background:var(--white);text-align:center;border-top:0.5px solid var(--line-soft);}
+  .cta .num{font-family:var(--serif);font-style:italic;font-size:14px;color:var(--brass);letter-spacing:.4em;}
+  .cta h2{font-family:var(--serif);font-weight:300;font-size:128px;line-height:1.04;margin-top:32px;color:var(--ink);letter-spacing:.005em;}
+  .cta h2 em{font-style:italic;}
+  .cta h2 .stroke{-webkit-text-stroke:0.6px var(--ink);color:transparent;}
+  .cta .jp{margin-top:42px;font-family:var(--jp);font-size:14px;letter-spacing:.16em;color:var(--ink-3);}
+  .cta .btn-wrap{margin-top:64px;}
+  .cta .btn{display:inline-flex;align-items:center;gap:20px;padding:22px 48px;border:0.5px solid var(--ink);
+    font-size:11px;letter-spacing:.4em;color:var(--ink);transition:background .4s,color .4s;}
+  .cta .btn:hover{background:var(--ink);color:#FFF;}
+  .cta .btn .arrow{font-family:var(--serif);font-style:italic;font-size:14px;letter-spacing:0;}
+
+  /* ============ Footer ============ */
+  footer{background:var(--white);color:var(--ink);padding:140px 56px 48px;border-top:0.5px solid var(--line);}
+  .ftr{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:64px;align-items:start;}
+  .ftr .logo{font-family:var(--serif);font-weight:300;font-size:60px;letter-spacing:.32em;text-transform:lowercase;}
+  .ftr .logo small{display:block;font-family:var(--serif);font-style:italic;font-size:14px;letter-spacing:.2em;color:var(--brass);margin-top:18px;}
+  .ftr .info{margin-top:32px;font-family:var(--jp);font-size:13px;line-height:2.2;color:var(--ink-3);letter-spacing:.06em;}
+  .ftr .col h4{font-size:10px;letter-spacing:.4em;color:var(--ink-3);margin-bottom:24px;font-weight:400;}
+  .ftr .col li{list-style:none;margin-bottom:12px;font-family:var(--sans);font-size:13px;font-weight:300;color:var(--ink-2);}
+  .ftr .col a:hover{color:var(--brass);}
+  .ftr-bot{display:flex;justify-content:space-between;align-items:center;margin-top:120px;padding-top:24px;border-top:0.5px solid var(--line);font-size:10px;letter-spacing:.4em;color:var(--ink-4);}
+
+  /* ============ Reveal ============ */
+  .reveal{opacity:0;transform:translateY(40px);transition:opacity 1.2s ease,transform 1.4s cubic-bezier(.2,.8,.2,1);}
+  .reveal.in{opacity:1;transform:translateY(0);}
+
+  /* ============ Sauna schedule block ============ */
+  .sauna-schedule{background:#0A0A0A;color:#FBFAF7;padding:140px 56px 160px;
+    border-top:0.5px solid rgba(255,250,232,.12);}
+  .sched-head{text-align:center;margin-bottom:96px;}
+  .sched-head .num{font-family:var(--serif);font-style:italic;font-size:13px;letter-spacing:.4em;color:#B89773;margin-bottom:18px;}
+  .sched-head h3{font-family:var(--serif);font-weight:300;font-style:italic;font-size:72px;line-height:1.0;color:#FBFAF7;letter-spacing:.005em;}
+  .sched-head .jp{margin-top:22px;font-family:var(--jp);font-size:13px;letter-spacing:.5em;color:#D7D0BD;}
+
+  .sched-grid{display:grid;grid-template-columns:1fr 1px 1fr;gap:0;max-width:1100px;margin:0 auto;}
+  .sched-divider{background:rgba(255,250,232,.16);}
+
+  .sched-col{padding:0 56px;}
+  .sched-villa{display:flex;align-items:baseline;gap:18px;padding-bottom:32px;border-bottom:0.5px solid rgba(255,250,232,.18);margin-bottom:48px;}
+  .sched-villa .lbl{font-family:var(--serif);font-style:italic;font-size:13px;letter-spacing:.4em;color:#B89773;}
+  .sched-villa .big{font-family:var(--serif);font-weight:300;font-style:italic;font-size:86px;line-height:.85;color:#FBFAF7;}
+  .sched-villa .name{font-family:var(--jp);font-weight:300;font-size:16px;letter-spacing:.12em;color:#D7D0BD;margin-left:auto;}
+  .sched-villa .name em{font-family:var(--serif);font-style:italic;font-size:13px;color:#9B947F;display:block;margin-top:4px;letter-spacing:.06em;}
+
+  .sched-block{margin-bottom:42px;}
+  .sched-block:last-child{margin-bottom:0;}
+  .sched-block .block-head{display:flex;justify-content:space-between;align-items:baseline;padding-bottom:14px;margin-bottom:18px;border-bottom:0.5px solid rgba(255,250,232,.12);}
+  .sched-block .kind{font-family:var(--serif);font-weight:300;font-style:italic;font-size:24px;color:#FBFAF7;letter-spacing:.04em;}
+  .sched-block .dur{font-family:var(--sans);font-size:10px;letter-spacing:.3em;color:#9B947F;font-weight:300;}
+  .sched-block ul{list-style:none;display:flex;flex-direction:column;gap:14px;}
+  .sched-block li{display:grid;grid-template-columns:32px 1fr;align-items:baseline;gap:14px;}
+  .sched-block .i{font-family:var(--serif);font-style:italic;font-size:14px;color:#B89773;letter-spacing:.04em;}
+  .sched-block .t{font-family:var(--serif);font-weight:300;font-size:26px;letter-spacing:.04em;color:#FBFAF7;
+    font-variant-numeric:tabular-nums;}
+  .sched-block .t .sep{color:#7A7464;margin:0 10px;font-style:italic;font-weight:300;}
+
+  .sched-notes{max-width:1100px;margin:96px auto 0;padding-top:48px;border-top:0.5px solid rgba(255,250,232,.16);}
+  .sched-notes h4{font-family:var(--serif);font-style:italic;font-size:13px;letter-spacing:.4em;color:#B89773;margin-bottom:24px;}
+  .sched-notes ul{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:18px 64px;}
+  .sched-notes li{font-family:var(--jp);font-size:13px;line-height:1.95;color:#C9C2AE;letter-spacing:.06em;display:flex;gap:14px;}
+  .sched-notes li::before{content:"";flex:none;width:14px;height:0.5px;background:#7A7464;margin-top:.95em;}
+
+  /* ============ Fixed Reservation FAB (bottom-left) ============ */
+  .reserve-fab{position:fixed;left:28px;bottom:28px;z-index:60;
+    display:inline-flex;align-items:center;gap:14px;
+    padding:18px 26px 18px 22px;background:var(--ink);color:#FFF;
+    border-radius:60px;font-family:var(--jp);font-size:12px;font-weight:400;letter-spacing:.22em;
+    box-shadow:0 12px 32px -10px rgba(0,0,0,.35);
+    opacity:0;transform:translateY(20px);pointer-events:none;
+    transition:opacity .8s ease,transform .8s cubic-bezier(.2,.8,.2,1),background .4s,color .4s,padding .35s;}
+  .reserve-fab.show{opacity:1;transform:translateY(0);pointer-events:auto;}
+  .reserve-fab .pulse{position:relative;width:8px;height:8px;border-radius:50%;background:var(--brass);
+    box-shadow:0 0 0 0 rgba(157,132,88,.6);animation:pulse 2.4s infinite;}
+  @keyframes pulse{
+    0%{box-shadow:0 0 0 0 rgba(157,132,88,.55);}
+    70%{box-shadow:0 0 0 10px rgba(157,132,88,0);}
+    100%{box-shadow:0 0 0 0 rgba(157,132,88,0);}
+  }
+  .reserve-fab .label{display:inline-flex;flex-direction:column;line-height:1.15;gap:2px;}
+  .reserve-fab .label .jp{font-family:var(--jp);font-size:13px;font-weight:400;letter-spacing:.22em;color:#FFF;}
+  .reserve-fab .label .en{font-family:var(--serif);font-style:italic;font-size:10.5px;letter-spacing:.28em;color:#D9CFB8;font-weight:300;}
+  .reserve-fab .arrow{font-family:var(--serif);font-style:italic;font-size:15px;letter-spacing:0;color:#D9CFB8;
+    transition:transform .35s ease;}
+  .reserve-fab:hover{background:var(--brass);padding:18px 32px 18px 22px;}
+  .reserve-fab:hover .arrow{transform:translate(3px,-3px);color:#FFF;}
+  .reserve-fab:hover .label .en{color:#FFF;}
+  .reserve-fab:hover .pulse{background:#FFF;box-shadow:none;animation:none;}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cur"></div>
+<div class="cursor-ring" id="curR"></div>
+
+<!-- Fixed reservation FAB -->
+<a class="reserve-fab" id="reserveFab" href="#cta">
+  <span class="pulse" aria-hidden="true"></span>
+  <span class="label">
+    <span class="jp">ご予約</span>
+    <span class="en">RESERVATION</span>
+  </span>
+  <span class="arrow">↗</span>
+</a>
+
+<nav class="topbar on-dark" id="topbar">
+  <a class="logo" href="#">covo</a>
+  <div class="nav">
+    <a href="#stay">STAY</a>
+    <a href="#sauna">SAUNA</a>
+    <a href="#dining">DINING</a>
+    <a href="#exp">EXPERIENCE</a>
+    <a href="#news">NEWS</a>
+    <a href="#access">ACCESS</a>
+  </div>
+  <div class="right">
+    <span>JP / EN</span>
+    <a class="booknow" href="#cta">RESERVATION</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero-sentinel">
+  <div class="img"></div>
+  <div class="ripple"></div>
+  <div class="vignette"></div>
+
+  <div class="hero-top">
+    <div class="meta">— for the Setouchi</div>
+    <div class="stamp">N 34.62°&nbsp;&nbsp;E 134.16°<br>SETOUCHI · USHIMADO<br>EST. MMXXIV</div>
+  </div>
+
+  <div class="hero-mid">
+    <span class="eyebrow">A QUIET HIDEAWAY</span>
+    <h1>
+      <span class="word l1"><span><em>covo,</em></span></span><br>
+      <span class="word l2"><span>by the inland sea.</span></span>
+    </h1>
+    <div class="jp">瀬 戸 内 . 牛 窓 . 二 組 だ け の 隠 れ 家</div>
+  </div>
+
+  <div class="hero-bot">
+    <div class="right">— covo ushimado est. mmxxiv</div>
+    <div class="scroll"><span>SCROLL</span><div class="line"></div></div>
+    <div class="right">CHECK AVAILABILITY ↗</div>
+  </div>
+</section>
+
+<!-- INTRO -->
+<section class="intro reveal">
+  <span class="eyebrow">CONCEPT  /  N°01</span>
+  <h2>
+    <em>A quiet hideaway</em><br>
+    by the inland sea.
+  </h2>
+  <div class="jp">海 と , 静 け さ と , わ た し だ け の 時 間 。</div>
+  <p>日々の喧騒からそっと離れ、瀬戸内・牛窓の海をひとり占めする一棟貸しのヴィラ。1日2組限定のプライベートな滞在で、潮の香りに包まれ、薪のはぜる音を聴き、湯と食と、ただ流れる時間を、心ゆくまで。</p>
+  <div class="divider"></div>
+</section>
+
+<!-- STAY -->
+<section class="stay" id="stay">
+  <div class="sec-head reveal">
+    <div class="l-side">
+      <div class="num">— STAY  /  N°02</div>
+      <h2><em>Two villas,</em><br>two stories.</h2>
+      <div class="jp">二 組 だ け の ヴ ィ ラ</div>
+    </div>
+    <div class="r-side">
+      <p>それぞれに物語のある2棟のヴィラ。気分や季節、過ごし方に合わせて、もうひとつの「わたし」の家として。</p>
+      <a class="more" href="#">View all villas <span>↗</span></a>
+    </div>
+  </div>
+
+  <div class="villa-grid">
+    <a class="villa villa-a reveal" href="#">
+      <div class="ph"><div class="inner"></div></div>
+      <div class="villa-meta">
+        <div class="info">
+          <div class="no">VILLA · N°01</div>
+          <div class="name">塩梅<em>— Anbai</em></div>
+        </div>
+        <div class="arrow">view →</div>
+      </div>
+      <p class="villa-desc">海を望む大窓と、薪ストーブのあるリビング。最大4名様。やわらかな木と土の手触りの中で、ゆっくりと夜が更けていく。</p>
+    </a>
+
+    <a class="villa villa-b reveal" href="#">
+      <div class="ph"><div class="inner"></div></div>
+      <div class="villa-meta">
+        <div class="info">
+          <div class="no">VILLA · N°02</div>
+          <div class="name">凪<em>— Nagi</em></div>
+        </div>
+        <div class="arrow">view →</div>
+      </div>
+      <p class="villa-desc">オーシャンビューの専用バスとデッキ。最大4名様。月明かりに照らされた海を眺めながらの夜風呂は、ここだけの贅沢。</p>
+    </a>
+  </div>
+</section>
+
+<!-- QUOTE -->
+<section class="quote reveal">
+  <p class="ql">
+    ただ <span class="stroke">ここにいるだけで,</span><br>
+    気がつけば、自然に満ちている。
+  </p>
+  <div class="jp">— f r o m  c o v o  u s h i m a d o</div>
+</section>
+
+<!-- SAUNA -->
+<section class="sauna" id="sauna">
+  <div class="sauna-wrap">
+    <div class="sauna-img">
+      <div class="steam"></div>
+      <div class="glow"></div>
+    </div>
+    <div class="sauna-body reveal">
+      <div class="num">— SAUNA  /  N°03</div>
+      <h2>Heat.<br><em>Breath.</em><br><span class="stroke">The sea.</span></h2>
+      <div class="jp">瀬 戸 内 の 海 を 望 む サ ウ ナ</div>
+      <p>瀬戸内の海を望む、フィンランド式バレルサウナ。薪の香りに包まれて整う、ここでしか味わえない外気浴。</p>
+      <ul>
+        <li>wood fired <em>薪</em></li>
+        <li>self löyly <em>ロウリュ</em></li>
+        <li>ocean breeze <em>外気浴</em></li>
+        <li>cold plunge <em>水風呂</em></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Sauna schedule -->
+  <div class="sauna-schedule reveal">
+    <div class="sched-head">
+      <div class="num">— SCHEDULE  /  N°03.5</div>
+      <h3>Sauna hours.</h3>
+      <div class="jp">サ ウ ナ 利 用 時 間</div>
+    </div>
+
+    <div class="sched-grid">
+      <!-- Villa 01 -->
+      <div class="sched-col">
+        <div class="sched-villa">
+          <span class="lbl">VILLA</span>
+          <span class="big">01</span>
+          <span class="name">塩梅<em>— Anbai</em></span>
+        </div>
+
+        <div class="sched-block">
+          <div class="block-head">
+            <span class="kind">Daytime</span>
+            <span class="dur">80 MIN / SESSION</span>
+          </div>
+          <ul>
+            <li><span class="i">①</span><span class="t">15:00<span class="sep">—</span>16:20</span></li>
+            <li><span class="i">②</span><span class="t">18:00<span class="sep">—</span>19:20</span></li>
+            <li><span class="i">③</span><span class="t">21:00<span class="sep">—</span>22:20</span></li>
+          </ul>
+        </div>
+
+        <div class="sched-block">
+          <div class="block-head">
+            <span class="kind">Morning</span>
+            <span class="dur">40 MIN / SESSION</span>
+          </div>
+          <ul>
+            <li><span class="i">①</span><span class="t">&nbsp;5:30<span class="sep">—</span>&nbsp;6:10</span></li>
+            <li><span class="i">②</span><span class="t">&nbsp;7:10<span class="sep">—</span>&nbsp;7:50</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="sched-divider"></div>
+
+      <!-- Villa 02 -->
+      <div class="sched-col">
+        <div class="sched-villa">
+          <span class="lbl">VILLA</span>
+          <span class="big">02</span>
+          <span class="name">凪<em>— Nagi</em></span>
+        </div>
+
+        <div class="sched-block">
+          <div class="block-head">
+            <span class="kind">Daytime</span>
+            <span class="dur">80 MIN / SESSION</span>
+          </div>
+          <ul>
+            <li><span class="i">①</span><span class="t">16:30<span class="sep">—</span>17:50</span></li>
+            <li><span class="i">②</span><span class="t">19:30<span class="sep">—</span>20:50</span></li>
+            <li><span class="i">③</span><span class="t">22:30<span class="sep">—</span>23:50</span></li>
+          </ul>
+        </div>
+
+        <div class="sched-block">
+          <div class="block-head">
+            <span class="kind">Morning</span>
+            <span class="dur">40 MIN / SESSION</span>
+          </div>
+          <ul>
+            <li><span class="i">①</span><span class="t">&nbsp;6:20<span class="sep">—</span>&nbsp;7:00</span></li>
+            <li><span class="i">②</span><span class="t">&nbsp;8:30<span class="sep">—</span>&nbsp;9:10</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="sched-notes">
+      <h4>— GUIDANCE</h4>
+      <ul>
+        <li>必ず水着を着用のうえご利用ください。</li>
+        <li>空腹時、満腹時、飲酒後のご利用はお控えください。</li>
+        <li>医師により入浴を止められている方はご利用をお控えください。</li>
+        <li>代謝疾患や肥満症の方はご利用をお控えください。</li>
+        <li>早朝の最初の回は電源をお入れください。温まるまで約30分かかります。</li>
+        <li>ご利用は2棟が交互に使用するスケジュールです。重複しないようご協力ください。</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- DINING -->
+<section class="dining" id="dining">
+  <div class="sec-head reveal">
+    <div class="l-side">
+      <div class="num">— DINING  /  N°04</div>
+      <h2><em>Tastes of</em><br>the Setouchi.</h2>
+      <div class="jp">瀬 戸 内 の 恵 み を , 火 を 囲 ん で</div>
+    </div>
+    <div class="r-side">
+      <p>瀬戸内の魚介と岡山の野菜を、火を囲んで味わう夜。地のものを、その日いちばんおいしい形で。</p>
+      <a class="more" href="#">View menu <span>↗</span></a>
+    </div>
+  </div>
+
+  <div class="dining-grid">
+    <div class="tile t1 reveal">
+      <div class="ph"></div>
+      <div class="meta"><div class="no">N°01</div><div class="nm">夕餉<em>BBQ Dinner</em></div></div>
+    </div>
+    <div class="tile t2 reveal">
+      <div class="ph"></div>
+      <div class="meta"><div class="no">N°02</div><div class="nm">朝餉<em>Morning Plate</em></div></div>
+    </div>
+    <div class="tile t3 reveal">
+      <div class="ph"></div>
+      <div class="meta"><div class="no">N°03</div><div class="nm">乾杯<em>Wine &amp; Sake</em></div></div>
+    </div>
+    <div class="tile t4 reveal">
+      <div class="ph"></div>
+      <div class="meta"><div class="no">N°04</div><div class="nm">焚火<em>Bonfire</em></div></div>
+    </div>
+    <div class="tile t5 reveal">
+      <div class="ph"></div>
+      <div class="meta"><div class="no">N°05</div><div class="nm"><em>olive</em></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE — sourced from 瀬戸内市公式観光サイト「瀬戸内市の旅」 -->
+<section class="exp" id="exp">
+  <div class="exp-head reveal">
+    <div class="num">— EXPERIENCE  /  N°05</div>
+    <h2>Slow days, slower waves.</h2>
+    <div class="jp">瀬 戸 内 市 の 過 ご し 方</div>
+  </div>
+  <div class="exp-row">
+    <a class="exp-item reveal" href="https://www.okayama-kanko.jp/setouchi/spot/detail_11144.html" target="_blank" rel="noopener">
+      <div class="ph e1"><div></div></div>
+      <div class="meta">
+        <div><h3><em>Kuroshima Venus Road</em>黒島ヴィーナスロード</h3></div>
+        <div class="arrow">view ↗</div>
+      </div>
+      <p>潮が引くと現れる、3つの島をつなぐ砂の道。干潮の前後だけ現れる、瀬戸内のちょっとした奇跡。覚悟さえあれば、ハートの石も見つかるかも。</p>
+    </a>
+    <a class="exp-item reveal" href="https://www.okayama-kanko.jp/setouchi/spot/detail_11131.html" target="_blank" rel="noopener">
+      <div class="ph e2"><div></div></div>
+      <div class="meta">
+        <div><h3><em>Ushimado Olive Garden</em>牛窓オリーブ園</h3></div>
+        <div class="arrow">view ↗</div>
+      </div>
+      <p>瀬戸内海を一望する丘の上、約2,000本のオリーブが育つ庭園。ローマの丘を思わせる景色は、夕暮れに少しだけイタリアの風が吹く。</p>
+    </a>
+    <a class="exp-item reveal" href="https://www.okayama-kanko.jp/setouchi/spot/detail_11157.html" target="_blank" rel="noopener">
+      <div class="ph e3"><div></div></div>
+      <div class="meta">
+        <div><h3><em>Maeshima Island</em>前島</h3></div>
+        <div class="arrow">view ↗</div>
+      </div>
+      <p>牛窓港からフェリーでわずか5分。自転車で一周できる小さな島。瀬戸内の海風を浴びながら、誰もいないビーチや古い港を巡る半日。</p>
+    </a>
+  </div>
+
+  <!-- secondary explore — quieter row of additional Setouchi spots -->
+  <div class="exp-more reveal">
+    <div class="exp-more-head">
+      <div class="num">— MORE SPOTS  /  N°05.5</div>
+      <h3>more from <em>setouchi.</em></h3>
+    </div>
+    <ul class="exp-more-list">
+      <li>
+        <a href="https://www.okayama-kanko.jp/setouchi/spot/detail_11138.html" target="_blank" rel="noopener">
+          <span class="no">N°06</span>
+          <span class="nm">牛窓海遊文化館<em>— Marine Culture</em></span>
+          <span class="desc">明治期の旧牛窓警察署を活かした、瀬戸内の海と街の歴史にふれる文化館。</span>
+          <span class="arr">↗</span>
+        </a>
+      </li>
+      <li>
+        <a href="https://www.okayama-kanko.jp/setouchi/spot/index.html" target="_blank" rel="noopener">
+          <span class="no">N°07</span>
+          <span class="nm">しおまち唐琴通り<em>— Shiomachi</em></span>
+          <span class="desc">江戸時代の宿場町、海沿いに残るレトロな散策路。</span>
+          <span class="arr">↗</span>
+        </a>
+      </li>
+      <li>
+        <a href="https://www.okayama-kanko.jp/setouchi/news/detail_134.html" target="_blank" rel="noopener">
+          <span class="no">N°08</span>
+          <span class="nm">シーカヤック<em>— Sea Kayak</em></span>
+          <span class="desc">穏やかな瀬戸内の海を漕ぎ出す、半日アドベンチャー。</span>
+          <span class="arr">↗</span>
+        </a>
+      </li>
+      <li>
+        <a href="https://www.okayama-kanko.jp/setouchi/harmonia/" target="_blank" rel="noopener">
+          <span class="no">N°09</span>
+          <span class="nm">牛窓アートハルモニア<em>— Art Harmonia</em></span>
+          <span class="desc">海を見下ろす丘のアートスペース。週末のひと寄り道。</span>
+          <span class="arr">↗</span>
+        </a>
+      </li>
+    </ul>
+    <div class="exp-source">— curated from <a href="https://www.okayama-kanko.jp/setouchi/index.html" target="_blank" rel="noopener">瀬戸内市公式観光サイト「瀬戸内市の旅」</a></div>
+  </div>
+</section>
+
+<!-- NEWS -->
+<section class="news" id="news">
+  <div class="sec-head reveal">
+    <div class="l-side">
+      <div class="num">— NEWS  /  N°06</div>
+      <h2><em>News &</em><br>stories.</h2>
+      <div class="jp">最 新 の covo か ら の お 知 ら せ</div>
+    </div>
+    <div class="r-side">
+      <p>季節のご宿泊プラン、ヴィラの新しい設え、メディア掲載、地元との取り組みなど、covo ushimado からの最新のお知らせ。</p>
+      <a class="more" href="#">View all news <span>↗</span></a>
+    </div>
+  </div>
+
+  <div class="news-grid">
+    <!-- Featured article -->
+    <a class="news-feature reveal" href="#">
+      <div class="ph"><div></div></div>
+      <div class="meta">
+        <span class="date">2026.06.01</span>
+        <span class="cat">夏のご宿泊プラン</span>
+        <span class="feat">FEATURED</span>
+      </div>
+      <h3><em>Setouchi Summer Stay</em>瀬戸内の夏を味わう、季節限定プラン</h3>
+      <p>地元漁師と巡るサンセットクルーズ付きの夏季限定ステイ。波音とともに迎える朝食、夜のサウナと外気浴。7月〜9月の特別なご滞在を、二組だけのプライベートな時間としてお過ごしください。</p>
+      <span class="feature-arrow">read the story <span>↗</span></span>
+    </a>
+
+    <!-- News list -->
+    <div class="news-list">
+      <div class="news-list-head">
+        <span class="ttl">— latest topics</span>
+        <a class="all" href="#">all news <span>↗</span></a>
+      </div>
+
+      <a class="news-item reveal" href="#">
+        <div class="left">
+          <span class="date">2026.05.20</span>
+          <span class="cat">メディア</span>
+        </div>
+        <div class="title">『Casa BRUTUS』7月号にて covo ushimado が紹介されました。<em>— Press</em></div>
+        <span class="arr">↗</span>
+      </a>
+
+      <a class="news-item reveal" href="#">
+        <div class="left">
+          <span class="date">2026.04.18</span>
+          <span class="cat">ダイニング</span>
+        </div>
+        <div class="title">春の旬を味わう、地元食材の特別ディナーコースをご用意しました。<em>— Dining</em></div>
+        <span class="arr">↗</span>
+      </a>
+
+      <a class="news-item reveal" href="#">
+        <div class="left">
+          <span class="date">2026.03.10</span>
+          <span class="cat">お知らせ</span>
+        </div>
+        <div class="title">ヴィラ「凪」のリノベーションが完了いたしました。<em>— Renewal</em></div>
+        <span class="arr">↗</span>
+      </a>
+
+      <a class="news-item reveal" href="#">
+        <div class="left">
+          <span class="date">2026.02.05</span>
+          <span class="cat">サスティナビリティ</span>
+        </div>
+        <div class="title">地元のオリーブ農園と協働した新しい朝食プランを開始。<em>— Local</em></div>
+        <span class="arr">↗</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta" id="cta">
+  <div class="num reveal">— RESERVATION</div>
+  <h2 class="reveal"><em>Reserve</em> your<br><span class="stroke">quiet</span> weekend.</h2>
+  <div class="jp reveal">瀬 戸 内 の 週 末 を , こ こ で 。</div>
+  <div class="btn-wrap reveal">
+    <a class="btn" href="#">CHECK AVAILABILITY <span class="arrow">↗</span></a>
+  </div>
+</section>
+
+<footer id="access">
+  <div class="ftr">
+    <div>
+      <div class="logo">covo<small>— ushimado, est. mmxxiv —</small></div>
+      <p class="info">岡山県瀬戸内市牛窓町鹿忍 7195-1<br>Check-in 14:00  /  Check-out 10:00<br>+81 869 XX XXXX  /  covo@ushimado.jp</p>
+    </div>
+    <div class="col">
+      <h4>STAY</h4>
+      <ul><li><a href="#">Villa Anbai</a></li><li><a href="#">Villa Nagi</a></li><li><a href="#">Plans</a></li></ul>
+    </div>
+    <div class="col">
+      <h4>EXPERIENCE</h4>
+      <ul><li><a href="#">Sauna</a></li><li><a href="#">Dining</a></li><li><a href="#">Cycling</a></li><li><a href="#">Cruise</a></li></ul>
+    </div>
+    <div class="col">
+      <h4>INFO</h4>
+      <ul><li><a href="#access">Access</a></li><li><a href="#">FAQ</a></li><li><a href="#news">News</a></li><li><a href="#">Contact</a></li></ul>
+    </div>
+  </div>
+  <div class="ftr-bot">
+    <span>© 2026 covo ushimado · ATELIER CUORE Inc.</span>
+    <span>INSTAGRAM · FACEBOOK · YOUTUBE</span>
+  </div>
+</footer>
+
+<script>
+  // Cursor
+  const cur = document.getElementById('cur');
+  const curR = document.getElementById('curR');
+  let mx=0,my=0,rx=0,ry=0;
+  window.addEventListener('mousemove',e=>{
+    mx=e.clientX;my=e.clientY;
+    cur.style.left=mx+'px'; cur.style.top=my+'px';
+  });
+  function ringLoop(){
+    rx += (mx-rx)*0.14; ry += (my-ry)*0.14;
+    curR.style.left=rx+'px'; curR.style.top=ry+'px';
+    requestAnimationFrame(ringLoop);
+  } ringLoop();
+  document.querySelectorAll('a, .villa, .tile, .exp-item, .btn').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{cur.classList.add('big');});
+    el.addEventListener('mouseleave',()=>{cur.classList.remove('big');});
+  });
+
+  // Topbar color toggles between hero (dark) / page (white)
+  const topbar = document.getElementById('topbar');
+  const heroSentinel = document.getElementById('hero-sentinel');
+  const sauna = document.getElementById('sauna');
+  const fab = document.getElementById('reserveFab');
+  const cta = document.getElementById('cta');
+  function updateBar(){
+    const heroBottom = heroSentinel.getBoundingClientRect().bottom;
+    const saunaRect = sauna.getBoundingClientRect();
+    const inSauna = saunaRect.top < 80 && saunaRect.bottom > 80;
+    if(heroBottom > 80 || inSauna){ topbar.classList.add('on-dark'); }
+    else { topbar.classList.remove('on-dark'); }
+    // FAB: visible after hero scrolled past, hidden when CTA is in viewport
+    const heroPast = heroBottom < window.innerHeight * 0.6;
+    const ctaRect = cta.getBoundingClientRect();
+    const ctaInView = ctaRect.top < window.innerHeight * 0.75 && ctaRect.bottom > 0;
+    if(heroPast && !ctaInView){ fab.classList.add('show'); }
+    else { fab.classList.remove('show'); }
+  }
+  window.addEventListener('scroll',updateBar,{passive:true});
+  window.addEventListener('resize',updateBar);
+  updateBar();
+
+  // Reveal
+  const io = new IntersectionObserver(es=>{
+    es.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('in'); });
+  },{threshold:0.12});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+  // Smooth scroll
+  document.querySelectorAll('a[href^="#"]').forEach(a=>{
+    a.addEventListener('click',e=>{
+      const id = a.getAttribute('href').slice(1);
+      const t = document.getElementById(id);
+      if(t){ e.preventDefault(); t.scrollIntoView({behavior:'smooth'}); }
+    });
+  });
+</script>
+</body>
+</html>

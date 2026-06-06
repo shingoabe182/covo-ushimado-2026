@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<title>covo ushimado — luxury renewal mock</title>
+<meta name="viewport" content="width=1440" />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Noto+Serif+JP:wght@300;400;500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* Reference-aligned palette — sankara / soki / snow peak feel */
+    --ivory:#F6F1E5;        /* page background — sankara off-white */
+    --ivory-2:#EFE7D6;      /* card surfaces */
+    --sand:#DCCFB4;         /* warm sand */
+    --sand-deep:#B8A789;
+    --taupe:#8C7E6A;
+    --forest:#3F4F44;       /* deep forest green (snowpeak) */
+    --forest-deep:#252E29;
+    --sea:#4F5F62;          /* muted sea — sankara horizon */
+    --brass:#9D8458;        /* very restrained accent */
+    --ink:#1B1813;
+    --ink-2:#3A342B;
+    --ink-3:#6B6356;
+    --paper:#FBF7EC;
+
+    --serif:'Cormorant Garamond','Noto Serif JP', serif;
+    --jp:'Noto Serif JP', serif;
+    --sans:'Inter', system-ui, sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{background:var(--ivory);color:var(--ink);font-family:var(--sans);overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+  body{cursor:none;font-weight:300;}
+  a{color:inherit;text-decoration:none;}
+  img{display:block;max-width:100%;}
+
+  /* ================= Cursor ================= */
+  .cursor{position:fixed;width:6px;height:6px;border-radius:50%;background:var(--ink);
+    top:0;left:0;transform:translate(-50%,-50%);pointer-events:none;z-index:999;
+    transition:width .35s ease,height .35s ease,background .25s;}
+  .cursor.big{width:54px;height:54px;background:var(--forest);opacity:.85;}
+  .cursor-ring{position:fixed;width:28px;height:28px;border:0.5px solid var(--ink);border-radius:50%;
+    top:0;left:0;transform:translate(-50%,-50%);pointer-events:none;z-index:998;opacity:.5;}
+
+  /* ================= Top bar ================= */
+  .topbar{position:fixed;top:0;left:0;right:0;z-index:50;padding:28px 56px;
+    display:flex;align-items:center;justify-content:space-between;color:#fff;mix-blend-mode:difference;}
+  .topbar .logo{font-family:var(--serif);font-size:30px;font-weight:300;letter-spacing:.32em;text-transform:lowercase;}
+  .topbar .nav{display:flex;gap:36px;font-family:var(--sans);font-size:11px;letter-spacing:.32em;font-weight:400;}
+  .topbar .nav a{position:relative;}
+  .topbar .nav a::after{content:"";position:absolute;left:0;right:0;bottom:-6px;height:0.5px;background:currentColor;
+    transform:scaleX(0);transform-origin:right;transition:transform .8s cubic-bezier(.7,0,.15,1);}
+  .topbar .nav a:hover::after{transform:scaleX(1);transform-origin:left;}
+  .topbar .right{display:flex;align-items:center;gap:32px;font-size:11px;letter-spacing:.32em;}
+  .topbar .booknow{padding:11px 22px;border:0.5px solid currentColor;font-weight:400;
+    transition:background .4s,color .4s;}
+
+  /* ================= Hero ================= */
+  .hero{position:relative;height:100vh;min-height:820px;
+    background:linear-gradient(180deg, #E8DECC 0%, #D3C5AA 38%, #95A095 70%, #4F5F62 100%);
+    overflow:hidden;color:#fff;}
+  .hero .grain{position:absolute;inset:0;background-image:radial-gradient(rgba(20,15,5,.04) 1px,transparent 1px);
+    background-size:3px 3px;pointer-events:none;opacity:.6;}
+  .hero .sun{position:absolute;left:50%;top:32%;transform:translateX(-50%);width:340px;height:340px;border-radius:50%;
+    background:radial-gradient(closest-side,#F7E9C7,rgba(247,233,199,0));
+    animation:bob 10s ease-in-out infinite;}
+  @keyframes bob{50%{transform:translate(-50%,-14px);}}
+  .hero .horizon{position:absolute;left:0;right:0;top:60%;height:1px;background:rgba(255,250,235,.45);}
+  .hero .ripple{position:absolute;left:0;right:0;top:60%;bottom:0;
+    background:
+      repeating-linear-gradient(180deg, rgba(255,255,255,0) 0 14px, rgba(255,255,255,.04) 14px 15px);
+    mask-image:linear-gradient(180deg,#000,transparent 90%);}
+
+  .hero-top{position:absolute;top:130px;left:56px;right:56px;display:grid;grid-template-columns:1fr auto;align-items:start;color:#fff;}
+  .hero-top .meta{font-family:var(--serif);font-style:italic;font-weight:300;font-size:14px;letter-spacing:.04em;}
+  .hero-top .stamp{font-size:10px;letter-spacing:.36em;line-height:1.9;text-align:right;font-weight:400;}
+
+  .hero-title{position:absolute;left:56px;right:56px;top:46%;transform:translateY(-50%);text-align:center;}
+  .hero-title .eyebrow{display:inline-flex;align-items:center;gap:14px;font-size:10px;letter-spacing:.45em;font-weight:400;}
+  .hero-title .eyebrow::before,.hero-title .eyebrow::after{content:"";width:36px;height:0.5px;background:currentColor;}
+  .hero-title h1{font-family:var(--serif);font-weight:300;font-size:148px;line-height:1.0;letter-spacing:.005em;margin-top:32px;}
+  .hero-title h1 em{font-style:italic;font-weight:300;}
+  .hero-title h1 .word{display:inline-block;overflow:hidden;}
+  .hero-title h1 .word > span{display:inline-block;transform:translateY(110%);
+    animation:rise 1.6s cubic-bezier(.2,.8,.2,1) forwards;}
+  .hero-title h1 .l2 > span{animation-delay:.2s;}
+  @keyframes rise{to{transform:translateY(0);}}
+  .hero-title .jp{margin-top:36px;font-family:var(--jp);font-weight:300;font-size:14px;letter-spacing:.4em;line-height:2;}
+
+  .hero-bottom{position:absolute;left:56px;right:56px;bottom:48px;display:flex;justify-content:space-between;align-items:end;color:#fff;}
+  .hero-bottom .info{font-family:var(--serif);font-style:italic;font-size:14px;font-weight:300;opacity:.85;line-height:1.7;}
+  .hero-bottom .info b{font-style:normal;font-family:var(--sans);font-size:11px;letter-spacing:.32em;font-weight:400;display:block;margin-bottom:8px;opacity:.7;}
+  .hero-bottom .scroll{display:flex;flex-direction:column;align-items:center;gap:10px;font-size:10px;letter-spacing:.4em;opacity:.8;}
+  .hero-bottom .scroll .line{width:1px;height:42px;background:currentColor;overflow:hidden;position:relative;opacity:.5;}
+  .hero-bottom .scroll .line::after{content:"";position:absolute;inset:0;background:#fff;animation:drip 2.8s ease-in-out infinite;}
+  @keyframes drip{0%{transform:translateY(-100%);}55%{transform:translateY(0);}100%{transform:translateY(100%);}}
+
+  /* tiny reservation, ultra-restrained */
+  .hero-bottom .reserve{font-family:var(--sans);font-size:11px;letter-spacing:.32em;text-align:right;}
+  .hero-bottom .reserve .lbl{opacity:.7;margin-bottom:8px;}
+  .hero-bottom .reserve a{display:inline-block;padding:14px 30px;border:0.5px solid #fff;transition:background .35s,color .35s;}
+  .hero-bottom .reserve a:hover{background:#fff;color:var(--ink);}
+
+  /* ================= Intro line ================= */
+  .intro{padding:140px 56px 120px;text-align:center;}
+  .intro .label{font-size:10px;letter-spacing:.4em;color:var(--taupe);margin-bottom:36px;}
+  .intro h2{font-family:var(--jp);font-weight:300;font-size:38px;line-height:2;color:var(--ink);letter-spacing:.04em;}
+  .intro h2 em{font-family:var(--serif);font-style:italic;font-weight:300;color:var(--forest);}
+  .intro .divider{width:1px;height:80px;background:var(--sand-deep);margin:60px auto 0;}
+
+  /* ================= Concept (asym) ================= */
+  .concept{padding:140px 56px 160px;background:var(--ivory);position:relative;}
+  .concept-grid{display:grid;grid-template-columns:5fr 1fr 5fr;gap:0;align-items:stretch;}
+  .concept-photo{aspect-ratio:3/4;background:linear-gradient(170deg,#E8DECC 0%,#B8A789 45%,#4F5F62 75%,#2A363A 100%);position:relative;overflow:hidden;}
+  .concept-photo::before{content:"";position:absolute;left:50%;top:34%;transform:translateX(-50%);width:46%;height:48%;border-radius:50% 50% 8% 8%;background:#F4ECD8;opacity:.55;}
+  .concept-photo::after{content:"";position:absolute;left:0;right:0;top:74%;height:1px;background:rgba(255,250,235,.4);}
+  .concept-right{padding:60px 0 0 0;display:flex;flex-direction:column;}
+  .concept-right .num{font-family:var(--serif);font-size:14px;font-style:italic;color:var(--taupe);letter-spacing:.4em;margin-bottom:42px;}
+  .concept-right h2{font-family:var(--serif);font-weight:300;font-style:italic;font-size:84px;line-height:1.05;color:var(--ink);}
+  .concept-right h2 .stroke{-webkit-text-stroke:0.7px var(--ink);color:transparent;font-style:normal;}
+  .concept-right .jp{margin-top:36px;font-family:var(--jp);font-weight:400;font-size:24px;line-height:1.9;letter-spacing:.04em;color:var(--ink);}
+  .concept-right p{margin-top:42px;font-family:var(--jp);font-size:13px;line-height:2.2;color:var(--ink-3);font-weight:400;letter-spacing:.04em;max-width:480px;}
+  .concept-right .sig{margin-top:48px;font-family:var(--serif);font-style:italic;font-size:14px;color:var(--brass);}
+
+  /* ================= quiet marquee ================= */
+  .strip{padding:36px 0;background:var(--ivory);border-top:0.5px solid var(--sand-deep);border-bottom:0.5px solid var(--sand-deep);overflow:hidden;}
+  .strip-track{display:flex;gap:56px;white-space:nowrap;animation:slide 90s linear infinite;
+    font-family:var(--serif);font-weight:300;font-style:italic;font-size:32px;color:var(--ink-3);letter-spacing:.04em;}
+  .strip-track .dot{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--brass);margin:0 8px;vertical-align:middle;}
+  @keyframes slide{to{transform:translateX(-50%);}}
+
+  /* ================= Stay (asymmetric, restrained) ================= */
+  .stay{padding:180px 56px 200px;background:var(--paper);position:relative;}
+  .stay-head{display:grid;grid-template-columns:1fr 1fr;gap:80px;margin-bottom:120px;align-items:end;}
+  .stay-head .lbl{font-size:10px;letter-spacing:.4em;color:var(--taupe);margin-bottom:24px;}
+  .stay-head h2{font-family:var(--serif);font-weight:300;font-size:128px;line-height:.95;color:var(--ink);}
+  .stay-head h2 em{font-style:italic;}
+  .stay-head h2 .stroke{-webkit-text-stroke:0.7px var(--ink);color:transparent;}
+  .stay-head .desc{max-width:380px;font-family:var(--jp);font-size:14px;line-height:2.1;color:var(--ink-3);letter-spacing:.04em;align-self:end;justify-self:end;}
+
+  .villa-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:24px;position:relative;}
+  .villa{position:relative;overflow:hidden;cursor:none;display:block;}
+  .villa-a{grid-column:1/8;}
+  .villa-b{grid-column:6/13;margin-top:200px;}
+  .villa .ph{aspect-ratio:5/3.6;overflow:hidden;}
+  .villa-a .ph{background:linear-gradient(165deg,#E8DECC,#C9BCA4 45%,#8C7E6A 100%);position:relative;}
+  .villa-a .ph::before{content:"";position:absolute;left:16%;top:18%;width:68%;height:60%;background:rgba(255,250,232,.5);}
+  .villa-a .ph::after{content:"";position:absolute;left:16%;top:18%;width:68%;height:60%;
+    background:linear-gradient(180deg,rgba(180,168,140,.0) 0,rgba(180,168,140,.0) 55%,rgba(140,126,106,.5) 55%);}
+  .villa-b .ph{background:linear-gradient(170deg,#D1CDB8 0%,#6E7E7A 45%,#3F4F4F 100%);position:relative;}
+  .villa-b .ph::before{content:"";position:absolute;left:0;right:0;top:54%;height:1px;background:rgba(255,250,232,.35);}
+  .villa-b .ph::after{content:"";position:absolute;left:50%;top:24%;transform:translateX(-50%);width:240px;height:240px;border-radius:50%;background:radial-gradient(closest-side,#F0E5C7,rgba(240,229,199,0));mix-blend-mode:screen;}
+  .villa .meta-row{display:flex;justify-content:space-between;align-items:end;margin-top:28px;padding-bottom:8px;border-bottom:0.5px solid var(--sand-deep);}
+  .villa .no{font-family:var(--serif);font-style:italic;font-size:14px;color:var(--brass);letter-spacing:.4em;}
+  .villa .name{font-family:var(--serif);font-size:46px;font-weight:300;font-style:italic;color:var(--ink);}
+  .villa .name b{font-family:var(--jp);font-style:normal;font-weight:400;font-size:30px;color:var(--ink);display:block;margin-bottom:6px;letter-spacing:.06em;}
+  .villa .arrow{width:32px;height:32px;border:0.5px solid var(--ink);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:12px;color:var(--ink);transition:background .35s,color .35s;}
+  .villa:hover .arrow{background:var(--ink);color:var(--ivory);}
+  .villa .desc{font-family:var(--jp);font-size:13px;line-height:2.1;color:var(--ink-3);margin-top:18px;letter-spacing:.04em;max-width:420px;}
+
+  /* ================= Quote band ================= */
+  .quote{padding:140px 56px;background:var(--ivory);text-align:center;}
+  .quote .ql{font-family:var(--serif);font-style:italic;font-weight:300;font-size:54px;line-height:1.35;color:var(--ink);max-width:980px;margin:0 auto;}
+  .quote .ql .stroke{-webkit-text-stroke:0.6px var(--ink);color:transparent;font-style:normal;}
+  .quote .sig{margin-top:36px;font-size:11px;letter-spacing:.4em;color:var(--taupe);}
+
+  /* ================= Sauna ================= */
+  .sauna{background:var(--forest-deep);color:var(--ivory);position:relative;overflow:hidden;}
+  .sauna-wrap{display:grid;grid-template-columns:6fr 6fr;min-height:760px;}
+  .sauna-img{background:linear-gradient(170deg,#5C4A38 0%,#2C2218 60%,#10110D 100%);position:relative;overflow:hidden;}
+  .sauna-img::before{content:"";position:absolute;inset:0;
+    background:repeating-linear-gradient(90deg,
+      rgba(50,30,12,0) 0 36px, rgba(0,0,0,.18) 36px 37px,
+      rgba(0,0,0,0) 37px 72px, rgba(255,210,160,.04) 72px 73px);}
+  .sauna-img::after{content:"";position:absolute;top:-15%;right:-10%;width:65%;height:55%;border-radius:50%;
+    background:radial-gradient(closest-side,rgba(255,210,150,.5),rgba(255,210,150,0));}
+  .sauna-img .glow{position:absolute;left:50%;top:55%;transform:translateX(-50%);width:280px;height:160px;
+    border-radius:50% / 80% 80% 20% 20%;background:radial-gradient(closest-side,#FFB063,rgba(255,176,99,0));filter:blur(8px);
+    animation:emberPulse 4s ease-in-out infinite;}
+  @keyframes emberPulse{50%{opacity:.6;}}
+  .sauna-img .steam{position:absolute;inset:0;
+    background:radial-gradient(40% 30% at 30% 60%,rgba(255,230,200,.10),transparent 80%),
+               radial-gradient(40% 30% at 70% 80%,rgba(255,230,200,.07),transparent 80%);
+    animation:smoke 14s ease-in-out infinite;}
+  @keyframes smoke{50%{transform:translateY(-10px);}}
+
+  .sauna-body{padding:140px 80px;display:flex;flex-direction:column;justify-content:center;}
+  .sauna-body .lbl{font-size:10px;letter-spacing:.4em;color:var(--brass);margin-bottom:32px;}
+  .sauna-body h2{font-family:var(--serif);font-weight:300;font-size:96px;line-height:1.0;}
+  .sauna-body h2 em{font-style:italic;}
+  .sauna-body h2 .stroke{-webkit-text-stroke:0.6px var(--ivory);color:transparent;}
+  .sauna-body .jp{margin-top:42px;font-family:var(--jp);font-size:16px;line-height:2.2;letter-spacing:.04em;color:var(--ivory);opacity:.85;max-width:480px;}
+  .sauna-body ul{margin-top:42px;list-style:none;display:flex;flex-direction:column;gap:14px;padding-top:24px;border-top:0.5px solid rgba(255,250,232,.18);max-width:380px;}
+  .sauna-body li{display:flex;justify-content:space-between;font-family:var(--jp);font-size:13px;color:var(--ivory);opacity:.85;}
+  .sauna-body li em{font-family:var(--serif);font-style:italic;font-size:14px;color:var(--brass);font-weight:300;}
+
+  /* ================= Dining (mosaic, refined) ================= */
+  .dining{padding:180px 56px 200px;background:var(--ivory);position:relative;}
+  .dining-head{display:grid;grid-template-columns:5fr 1fr 6fr;gap:0;align-items:end;margin-bottom:120px;}
+  .dining-head .lbl{font-size:10px;letter-spacing:.4em;color:var(--taupe);}
+  .dining-head h2{font-family:var(--serif);font-weight:300;font-style:italic;font-size:96px;line-height:1.0;color:var(--ink);}
+  .dining-head h2 .stroke{-webkit-text-stroke:0.6px var(--ink);color:transparent;font-style:normal;}
+  .dining-head .desc{font-family:var(--jp);font-size:14px;line-height:2.1;color:var(--ink-3);justify-self:end;max-width:380px;letter-spacing:.04em;}
+
+  .dining-grid{display:grid;grid-template-columns:repeat(12,1fr);grid-auto-rows:120px;gap:24px;}
+  .tile{position:relative;overflow:hidden;}
+  .tile .ph{position:absolute;inset:0;transition:transform 1.2s cubic-bezier(.2,.8,.2,1);}
+  .tile:hover .ph{transform:scale(1.04);}
+  .tile .meta{position:absolute;left:24px;bottom:24px;color:var(--ivory);z-index:2;}
+  .tile .no{font-family:var(--serif);font-style:italic;font-size:14px;letter-spacing:.4em;color:var(--brass);}
+  .tile .nm{font-family:var(--jp);font-size:26px;font-weight:400;margin-top:6px;letter-spacing:.06em;}
+  .tile .nm em{font-family:var(--serif);font-style:italic;font-size:16px;font-weight:300;display:block;margin-top:4px;opacity:.85;}
+
+  .tile.t1{grid-column:1/7;grid-row:1/5;}
+  .tile.t2{grid-column:7/10;grid-row:1/3;}
+  .tile.t3{grid-column:10/13;grid-row:1/4;}
+  .tile.t4{grid-column:7/11;grid-row:3/5;}
+  .tile.t5{grid-column:11/13;grid-row:4/5;}
+
+  .tile.t1 .ph{background:linear-gradient(170deg,#E8DECC 0%,#B8A789 50%,#62554A 100%);}
+  .tile.t1 .ph::before{content:"";position:absolute;left:50%;top:42%;transform:translate(-50%,-50%);width:260px;height:260px;border-radius:50%;background:#FAF4E4;}
+  .tile.t1 .ph::after{content:"";position:absolute;left:50%;top:42%;transform:translate(-50%,-50%);width:120px;height:120px;border-radius:50%;background:#7A6450;}
+  .tile.t2 .ph{background:linear-gradient(180deg,#DCDDC2 0%,#7B8E70 100%);}
+  .tile.t3 .ph{background:linear-gradient(170deg,#E8DECC 0%,#B8A789 60%,#7B6A53 100%);}
+  .tile.t4 .ph{background:linear-gradient(170deg,#C9D2D2 0%,#6F8487 60%,#3D4E50 100%);}
+  .tile.t5 .ph{background:linear-gradient(180deg,#D4C7AB,#7A6C50);}
+  .tile.t5 .meta .nm{font-size:18px;}
+  /* dark gradient overlay for text legibility */
+  .tile::after{content:"";position:absolute;left:0;right:0;bottom:0;height:55%;
+    background:linear-gradient(180deg,rgba(0,0,0,0),rgba(20,15,5,.55));z-index:1;pointer-events:none;}
+
+  /* ================= Experience (calm) ================= */
+  .exp{background:var(--paper);padding:180px 56px;position:relative;}
+  .exp-head{text-align:center;margin-bottom:100px;}
+  .exp-head .lbl{font-size:10px;letter-spacing:.4em;color:var(--taupe);margin-bottom:24px;}
+  .exp-head h2{font-family:var(--serif);font-weight:300;font-style:italic;font-size:96px;line-height:1.0;}
+  .exp-row{display:grid;grid-template-columns:repeat(3,1fr);gap:48px;}
+  .exp-item{display:flex;flex-direction:column;gap:0;cursor:none;}
+  .exp-item .ph{aspect-ratio:4/5;overflow:hidden;position:relative;}
+  .exp-item .ph div{position:absolute;inset:0;transition:transform 1.2s cubic-bezier(.2,.8,.2,1);}
+  .exp-item:hover .ph div{transform:scale(1.04);}
+  .exp-item .meta{margin-top:28px;padding-bottom:14px;border-bottom:0.5px solid var(--sand-deep);
+    display:flex;justify-content:space-between;align-items:end;}
+  .exp-item .no{font-family:var(--serif);font-style:italic;font-size:12px;color:var(--brass);letter-spacing:.4em;}
+  .exp-item h3{font-family:var(--jp);font-weight:400;font-size:24px;letter-spacing:.06em;color:var(--ink);}
+  .exp-item h3 em{display:block;font-family:var(--serif);font-style:italic;font-weight:300;font-size:14px;color:var(--ink-3);margin-bottom:4px;}
+  .exp-item .arrow{font-family:var(--serif);font-style:italic;font-size:14px;color:var(--ink);}
+  .exp-item p{margin-top:18px;font-family:var(--jp);font-size:13px;line-height:2.1;color:var(--ink-3);letter-spacing:.04em;}
+
+  /* asymmetric vertical offsets */
+  .exp-item:nth-child(2){transform:translateY(60px);}
+
+  .exp .ph.e1 div{background:linear-gradient(170deg,#D3C9AE 0%,#8C9474 50%,#54614F 100%);}
+  .exp .ph.e2 div{background:linear-gradient(170deg,#E0D9C7 0%,#B0A88E 45%,#6E6A57 100%);}
+  .exp .ph.e3 div{background:linear-gradient(180deg,#D7DAD6 0%,#7B8B83 55%,#3F4F4F 100%);}
+
+  /* ================= Reservation CTA ================= */
+  .cta{padding:180px 56px;background:var(--forest);color:var(--ivory);text-align:center;position:relative;overflow:hidden;}
+  .cta .lbl{font-size:10px;letter-spacing:.4em;color:var(--brass);}
+  .cta h2{font-family:var(--serif);font-weight:300;font-size:144px;line-height:1.0;margin-top:32px;letter-spacing:.005em;}
+  .cta h2 em{font-style:italic;}
+  .cta h2 .stroke{-webkit-text-stroke:0.6px var(--ivory);color:transparent;}
+  .cta .jp{margin-top:42px;font-family:var(--jp);font-size:18px;letter-spacing:.06em;opacity:.9;}
+  .cta .btn-wrap{margin-top:64px;}
+  .cta .btn{display:inline-flex;align-items:center;gap:20px;padding:22px 48px;border:0.5px solid var(--ivory);
+    font-size:12px;letter-spacing:.4em;color:var(--ivory);transition:background .4s,color .4s;}
+  .cta .btn:hover{background:var(--ivory);color:var(--forest);}
+  .cta .btn .arrow{font-family:var(--serif);font-style:italic;font-size:14px;letter-spacing:0;}
+
+  /* ================= Footer ================= */
+  footer{background:var(--ink);color:var(--ivory);padding:120px 56px 56px;}
+  .ftr{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:64px;align-items:start;}
+  .ftr .logo{font-family:var(--serif);font-weight:300;font-size:54px;letter-spacing:.32em;text-transform:lowercase;}
+  .ftr .logo small{display:block;font-family:var(--serif);font-style:italic;font-size:14px;letter-spacing:.2em;color:var(--brass);margin-top:18px;}
+  .ftr .info{margin-top:32px;font-family:var(--jp);font-size:13px;line-height:2.1;color:var(--ivory);opacity:.7;letter-spacing:.04em;}
+  .ftr .col h4{font-size:10px;letter-spacing:.4em;color:var(--brass);margin-bottom:24px;}
+  .ftr .col li{list-style:none;margin-bottom:12px;font-family:var(--sans);font-size:13px;font-weight:300;color:var(--ivory);opacity:.75;}
+  .ftr .col a:hover{opacity:1;color:var(--brass);}
+  .ftr-bot{display:flex;justify-content:space-between;align-items:center;margin-top:120px;padding-top:24px;border-top:0.5px solid #2A2520;font-size:10px;letter-spacing:.4em;opacity:.5;}
+
+  /* ================= Reveal ================= */
+  .reveal{opacity:0;transform:translateY(40px);transition:opacity 1.2s ease,transform 1.4s cubic-bezier(.2,.8,.2,1);}
+  .reveal.in{opacity:1;transform:translateY(0);}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cur"></div>
+<div class="cursor-ring" id="curR"></div>
+
+<nav class="topbar">
+  <a class="logo" href="#">covo</a>
+  <div class="nav">
+    <a href="#stay">STAY</a>
+    <a href="#sauna">SAUNA</a>
+    <a href="#dining">DINING</a>
+    <a href="#exp">EXPERIENCE</a>
+    <a href="#access">ACCESS</a>
+  </div>
+  <div class="right">
+    <span>JP / EN</span>
+    <a class="booknow" href="#cta">RESERVATION</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="grain"></div>
+  <div class="sun"></div>
+  <div class="horizon"></div>
+  <div class="ripple"></div>
+
+  <div class="hero-top">
+    <div class="meta">— for the Setouchi</div>
+    <div class="stamp">N 34.62°&nbsp;&nbsp;E 134.16°<br>SETOUCHI · USHIMADO<br>EST. MMXXIV</div>
+  </div>
+
+  <div class="hero-title">
+    <span class="eyebrow">A QUIET HIDEAWAY</span>
+    <h1>
+      <span class="word l1"><span><em>covo,</em></span></span><br>
+      <span class="word l2"><span>by the inland sea.</span></span>
+    </h1>
+    <div class="jp">瀬戸内に、ひっそりと佇む二組だけの隠れ家</div>
+  </div>
+
+  <div class="hero-bottom">
+    <div class="info">
+      <b>WELCOME</b>
+      Two villas. One coastline.<br>An hour to forget the rest.
+    </div>
+    <div class="scroll"><span>SCROLL</span><div class="line"></div></div>
+    <div class="reserve">
+      <div class="lbl">RESERVATION</div>
+      <a href="#cta">CHECK AVAILABILITY</a>
+    </div>
+  </div>
+</section>
+
+<!-- INTRO -->
+<section class="intro reveal">
+  <div class="label">— for the Setouchi —</div>
+  <h2>
+    海と、静けさと、<em>わたしだけの時間。</em><br>
+    潮の香りと、薪のはぜる音と、ゆっくり流れる夜。
+  </h2>
+  <div class="divider"></div>
+</section>
+
+<!-- CONCEPT -->
+<section class="concept">
+  <div class="concept-grid">
+    <div class="concept-photo reveal"></div>
+    <div></div>
+    <div class="concept-right reveal">
+      <div class="num">— CONCEPT  /  N°01</div>
+      <h2>A quiet<br><em>hideaway</em><br><span class="stroke">by the sea.</span></h2>
+      <div class="jp">日々の喧騒からそっと離れて。</div>
+      <p>瀬戸内・牛窓に佇む、隠れ家のように小さな一棟貸しのヴィラ。1日2組限定のプライベートな滞在で、潮の香りに包まれ、薪のはぜる音を聴き、湯と食と、ただ流れる時間を、心ゆくまで。</p>
+      <div class="sig">— covo ushimado, est. 2024</div>
+    </div>
+  </div>
+</section>
+
+<!-- quiet marquee -->
+<div class="strip">
+  <div class="strip-track">
+    <span>setouchi <i class="dot"></i> ushimado <i class="dot"></i> two villas only <i class="dot"></i> private sauna <i class="dot"></i> ocean view <i class="dot"></i> est. mmxxiv <i class="dot"></i></span>
+    <span>setouchi <i class="dot"></i> ushimado <i class="dot"></i> two villas only <i class="dot"></i> private sauna <i class="dot"></i> ocean view <i class="dot"></i> est. mmxxiv <i class="dot"></i></span>
+  </div>
+</div>
+
+<!-- STAY -->
+<section class="stay" id="stay">
+  <div class="stay-head reveal">
+    <div>
+      <div class="lbl">— STAY  /  N°02</div>
+      <h2><em>two</em><br><span class="stroke">villas,</span><br><em>two stories.</em></h2>
+    </div>
+    <p class="desc">それぞれに物語のある2棟のヴィラ。気分や季節、過ごし方に合わせて、もうひとつの「わたし」の家として。</p>
+  </div>
+
+  <div class="villa-grid">
+    <a class="villa villa-a reveal" href="#">
+      <div class="ph"></div>
+      <div class="meta-row">
+        <div>
+          <div class="no">VILLA · N°01</div>
+          <div class="name"><b>塩梅</b>Anbai</div>
+        </div>
+        <div class="arrow">↗</div>
+      </div>
+      <p class="desc">海を望む大窓と、薪ストーブのあるリビング。最大4名様。やわらかな木と土の手触りの中で、ゆっくりと夜が更けていく。</p>
+    </a>
+
+    <a class="villa villa-b reveal" href="#">
+      <div class="ph"></div>
+      <div class="meta-row">
+        <div>
+          <div class="no">VILLA · N°02</div>
+          <div class="name"><b>凪</b>Nagi</div>
+        </div>
+        <div class="arrow">↗</div>
+      </div>
+      <p class="desc">オーシャンビューの専用バスとデッキ。最大4名様。月明かりに照らされた海を眺めながらの夜風呂は、ここだけの贅沢。</p>
+    </a>
+  </div>
+</section>
+
+<!-- QUOTE -->
+<section class="quote reveal">
+  <div class="ql">
+    ただ <span class="stroke">ここにいるだけで,</span><br>
+    気がつけば、自然に満ちている。
+  </div>
+  <div class="sig">— from covo ushimado</div>
+</section>
+
+<!-- SAUNA -->
+<section class="sauna" id="sauna">
+  <div class="sauna-wrap">
+    <div class="sauna-img">
+      <div class="steam"></div>
+      <div class="glow"></div>
+    </div>
+    <div class="sauna-body reveal">
+      <div class="lbl">— SAUNA  /  N°03</div>
+      <h2>Heat.<br><em>Breath.</em><br><span class="stroke">The sea.</span></h2>
+      <p class="jp">瀬戸内の海を望む、フィンランド式バレルサウナ。薪の香りに包まれて整う、ここでしか味わえない外気浴。</p>
+      <ul>
+        <li>wood fired <em>薪</em></li>
+        <li>self löyly <em>セルフロウリュ</em></li>
+        <li>ocean breeze <em>外気浴</em></li>
+        <li>cold plunge <em>水風呂</em></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- DINING -->
+<section class="dining" id="dining">
+  <div class="dining-head reveal">
+    <div>
+      <div class="lbl">— DINING  /  N°04</div>
+      <h2>Tastes of<br>the <span class="stroke">Setouchi.</span></h2>
+    </div>
+    <div></div>
+    <p class="desc">瀬戸内の魚介と岡山の野菜を、火を囲んで味わう夜。地のものを、その日いちばんおいしい形で。</p>
+  </div>
+
+  <div class="dining-grid">
+    <div class="tile t1 reveal">
+      <div class="ph"></div>
+      <div class="meta"><div class="no">N°01</div><div class="nm">夕餉<em>BBQ Dinner</em></div></div>
+    </div>
+    <div class="tile t2 reveal">
+      <div class="ph"></div>
+      <div class="meta"><div class="no">N°02</div><div class="nm">朝餉<em>Morning Plate</em></div></div>
+    </div>
+    <div class="tile t3 reveal">
+      <div class="ph"></div>
+      <div class="meta"><div class="no">N°03</div><div class="nm">乾杯<em>Wine & Sake</em></div></div>
+    </div>
+    <div class="tile t4 reveal">
+      <div class="ph"></div>
+      <div class="meta"><div class="no">N°04</div><div class="nm">焚火<em>Bonfire</em></div></div>
+    </div>
+    <div class="tile t5 reveal">
+      <div class="ph"></div>
+      <div class="meta"><div class="no">N°05</div><div class="nm">olive</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section class="exp" id="exp">
+  <div class="exp-head reveal">
+    <div class="lbl">— EXPERIENCE  /  N°05</div>
+    <h2>Slow days, slower waves.</h2>
+  </div>
+  <div class="exp-row">
+    <a class="exp-item reveal" href="#">
+      <div class="ph e1"><div></div></div>
+      <div class="meta">
+        <div>
+          <h3><em>olive grove ride</em>オリーブ畑をめぐる</h3>
+        </div>
+        <div class="arrow">read ↗</div>
+      </div>
+      <p>レンタサイクルで日本最古のオリーブ畑へ。お弁当を持って、潮風を浴びながらの半日。</p>
+    </a>
+    <a class="exp-item reveal" href="#">
+      <div class="ph e2"><div></div></div>
+      <div class="meta">
+        <div>
+          <h3><em>sunset cruise</em>夕日クルーズ</h3>
+        </div>
+        <div class="arrow">read ↗</div>
+      </div>
+      <p>地元の漁師と巡る瀬戸内のサンセット。波の音と一杯のシャンパンに、言葉はいらない。</p>
+    </a>
+    <a class="exp-item reveal" href="#">
+      <div class="ph e3"><div></div></div>
+      <div class="meta">
+        <div>
+          <h3><em>just be here</em>ただここに居る</h3>
+        </div>
+        <div class="arrow">read ↗</div>
+      </div>
+      <p>デッキで本を読む、湯に浸かる、波の音だけを聴く。何もしない、という最高の贅沢。</p>
+    </a>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta" id="cta">
+  <div class="lbl reveal">— RESERVATION</div>
+  <h2 class="reveal"><em>Reserve</em><br>your <span class="stroke">quiet</span> hour.</h2>
+  <p class="jp reveal">瀬戸内の週末、空きカレンダーをご確認ください。</p>
+  <div class="btn-wrap reveal">
+    <a class="btn" href="#">CHECK AVAILABILITY <span class="arrow">↗</span></a>
+  </div>
+</section>
+
+<footer id="access">
+  <div class="ftr">
+    <div>
+      <div class="logo">covo<small>— ushimado, est. mmxxiv —</small></div>
+      <p class="info">岡山県瀬戸内市牛窓町鹿忍 7195-1<br>Check-in 14:00  /  Check-out 10:00<br>+81 869 XX XXXX  /  covo@ushimado.jp</p>
+    </div>
+    <div class="col">
+      <h4>STAY</h4>
+      <ul><li><a href="#">Villa Anbai</a></li><li><a href="#">Villa Nagi</a></li><li><a href="#">Plans</a></li></ul>
+    </div>
+    <div class="col">
+      <h4>EXPERIENCE</h4>
+      <ul><li><a href="#">Sauna</a></li><li><a href="#">Dining</a></li><li><a href="#">Cycling</a></li><li><a href="#">Cruise</a></li></ul>
+    </div>
+    <div class="col">
+      <h4>INFO</h4>
+      <ul><li><a href="#">Access</a></li><li><a href="#">FAQ</a></li><li><a href="#">News</a></li><li><a href="#">Contact</a></li></ul>
+    </div>
+  </div>
+  <div class="ftr-bot">
+    <span>© 2026 covo ushimado · ATELIER CUORE Inc.</span>
+    <span>INSTAGRAM · FACEBOOK · YOUTUBE</span>
+  </div>
+</footer>
+
+<script>
+  // Custom cursor (subtle)
+  const cur = document.getElementById('cur');
+  const curR = document.getElementById('curR');
+  let mx=0,my=0,rx=0,ry=0;
+  window.addEventListener('mousemove',e=>{
+    mx=e.clientX;my=e.clientY;
+    cur.style.left=mx+'px'; cur.style.top=my+'px';
+  });
+  function ringLoop(){
+    rx += (mx-rx)*0.14; ry += (my-ry)*0.14;
+    curR.style.left=rx+'px'; curR.style.top=ry+'px';
+    requestAnimationFrame(ringLoop);
+  } ringLoop();
+  document.querySelectorAll('a, .villa, .tile, .exp-item, .btn').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{cur.classList.add('big');});
+    el.addEventListener('mouseleave',()=>{cur.classList.remove('big');});
+  });
+
+  // Reveal on scroll
+  const io = new IntersectionObserver(es=>{
+    es.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('in'); });
+  },{threshold:0.12});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+  // Smooth-scroll
+  document.querySelectorAll('a[href^="#"]').forEach(a=>{
+    a.addEventListener('click',e=>{
+      const id = a.getAttribute('href').slice(1);
+      const t = document.getElementById(id);
+      if(t){ e.preventDefault(); t.scrollIntoView({behavior:'smooth'}); }
+    });
+  });
+</script>
+</body>
+</html>

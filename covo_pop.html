@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<title>covo ushimado — pop renewal mock</title>
+<meta name="viewport" content="width=1440" />
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Noto+Serif+JP:wght@400;600;800&family=Noto+Sans+JP:wght@400;500;700;900&family=Bricolage+Grotesque:wght@300;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FBF6E9;
+    --cream2:#F2EAD3;
+    --coral:#FF6B47;
+    --coral2:#FF8E5C;
+    --aqua:#4DB6CC;
+    --aqua-deep:#2A7E91;
+    --lime:#C7DC68;
+    --pink:#FFCEB9;
+    --mustard:#F4C430;
+    --ink:#1A1815;
+    --ink2:#3B342B;
+    --paper:#FFFCF2;
+    --serif:'DM Serif Display', 'Noto Serif JP', serif;
+    --jp:'Noto Serif JP', serif;
+    --sans:'Bricolage Grotesque','Noto Sans JP', system-ui, sans-serif;
+    --jpsans:'Noto Sans JP', system-ui, sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{background:var(--cream);color:var(--ink);font-family:var(--sans);overflow-x:hidden;}
+  body{cursor:none;}
+  a{color:inherit;text-decoration:none;}
+  img{display:block;max-width:100%;}
+
+  /* ============ Custom cursor ============ */
+  .cursor{position:fixed;width:10px;height:10px;border-radius:50%;background:var(--ink);
+    top:0;left:0;transform:translate(-50%,-50%);pointer-events:none;z-index:999;
+    transition:width .25s ease,height .25s ease,background .25s ease;mix-blend-mode:difference;}
+  .cursor.big{width:64px;height:64px;background:var(--coral);}
+  .cursor-ring{position:fixed;width:40px;height:40px;border:1px solid var(--ink);border-radius:50%;
+    top:0;left:0;transform:translate(-50%,-50%);pointer-events:none;z-index:998;
+    transition:width .3s,height .3s,opacity .3s;}
+
+  /* ============ Top bar ============ */
+  .topbar{position:fixed;top:0;left:0;right:0;z-index:50;padding:18px 36px;
+    display:flex;align-items:center;justify-content:space-between;mix-blend-mode:difference;color:#fff;}
+  .topbar .logo{font-family:var(--serif);font-size:30px;letter-spacing:.04em;}
+  .topbar .nav{display:flex;gap:28px;font-size:13px;letter-spacing:.18em;font-weight:500;}
+  .topbar .nav a{position:relative;padding:6px 2px;}
+  .topbar .nav a::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:currentColor;
+    transform:scaleX(0);transform-origin:right;transition:transform .35s cubic-bezier(.7,0,.15,1);}
+  .topbar .nav a:hover::after{transform:scaleX(1);transform-origin:left;}
+  .topbar .right{display:flex;align-items:center;gap:24px;font-size:12px;letter-spacing:.18em;}
+  .topbar .booknow{padding:10px 18px;border:1px solid #fff;border-radius:30px;font-weight:600;
+    transition:background .25s,color .25s;}
+  .topbar .booknow:hover{background:#fff;color:var(--ink);}
+
+  /* ============ Hero ============ */
+  .hero{position:relative;height:100vh;min-height:780px;padding:120px 36px 60px;overflow:hidden;
+    background:linear-gradient(180deg,#FBF6E9 0%,#FFE5C8 60%,#FFCEB9 100%);}
+  .hero .grain{position:absolute;inset:0;background-image:radial-gradient(rgba(0,0,0,.04) 1px,transparent 1px);
+    background-size:3px 3px;pointer-events:none;}
+  .hero-top{display:grid;grid-template-columns:1fr auto auto;align-items:start;gap:24px;}
+  .hero-top .meta{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--ink2);}
+  .hero-top .stamp{font-size:11px;letter-spacing:.3em;color:var(--ink2);text-align:right;line-height:1.7;}
+
+  .hero-title{position:relative;margin-top:60px;}
+  .hero-title h1{font-family:var(--serif);font-size:220px;line-height:.86;font-weight:400;letter-spacing:-.02em;}
+  .hero-title h1 .it{font-style:italic;color:var(--coral);}
+  .hero-title h1 .stroke{-webkit-text-stroke:1.5px var(--ink);color:transparent;}
+  .hero-title h1 .word{display:inline-block;overflow:hidden;}
+  .hero-title h1 .word > span{display:inline-block;transform:translateY(110%);
+    animation:rise 1.1s cubic-bezier(.2,.8,.2,1) forwards;}
+  .hero-title h1 .l2 > span{animation-delay:.15s;}
+  .hero-title h1 .l3 > span{animation-delay:.3s;}
+  @keyframes rise{to{transform:translateY(0);}}
+
+  .hero-photo{position:absolute;right:36px;top:54%;transform:translateY(-50%) rotate(3deg);
+    width:340px;height:440px;border-radius:170px 170px 30px 30px;overflow:hidden;
+    box-shadow:0 30px 60px -20px rgba(20,15,5,.25);transition:transform .25s ease-out;}
+  .hero-photo::before{content:"";position:absolute;inset:0;
+    background:linear-gradient(170deg,#F2EAD3 0%,#FFCEB9 32%,#FF8E5C 60%,#4DB6CC 60%,#2A7E91 100%);}
+  .hero-photo::after{content:"";position:absolute;left:0;right:0;top:60%;height:2px;background:#FFD; opacity:.7;}
+  .hero-photo .sun{position:absolute;top:18%;left:50%;transform:translateX(-50%);
+    width:120px;height:120px;border-radius:50%;background:#FFE5A8;mix-blend-mode:screen;
+    animation:bob 6s ease-in-out infinite;}
+  @keyframes bob{50%{transform:translate(-50%,-8px);}}
+  .hero-photo .villa{position:absolute;bottom:20%;left:30%;width:80px;height:38px;
+    background:var(--ink);clip-path:polygon(0 100%,12% 100%,12% 30%,30% 30%,30% 50%,50% 50%,50% 0,80% 0,80% 50%,100% 50%,100% 100%);}
+  .hero-photo .ripples{position:absolute;left:0;right:0;bottom:0;top:60%;background:
+    repeating-linear-gradient(180deg,transparent 0,transparent 7px,rgba(255,255,255,.25) 7px,rgba(255,255,255,.25) 8px);}
+
+  .hero-bottom{position:absolute;left:36px;right:36px;bottom:36px;display:flex;align-items:end;justify-content:space-between;gap:24px;}
+  .hero-jp{font-family:var(--jp);font-size:16px;line-height:1.9;color:var(--ink);max-width:360px;font-weight:400;}
+  .hero-jp strong{font-weight:600;color:var(--coral);}
+
+  /* sticker */
+  .sticker{position:absolute;right:36px;bottom:64px;width:160px;height:160px;
+    border-radius:50%;background:var(--lime);color:var(--ink);
+    display:flex;align-items:center;justify-content:center;text-align:center;font-weight:700;
+    font-size:13px;line-height:1.4;animation:spin 18s linear infinite;letter-spacing:.06em;
+    border:1.5px solid var(--ink);}
+  .sticker span{font-family:var(--serif);font-style:italic;font-weight:400;font-size:18px;display:block;margin-top:4px;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  .scroll-cue{position:absolute;left:50%;bottom:24px;transform:translateX(-50%);
+    font-size:11px;letter-spacing:.4em;color:var(--ink2);display:flex;flex-direction:column;align-items:center;gap:8px;}
+  .scroll-cue .line{width:1px;height:32px;background:var(--ink2);overflow:hidden;position:relative;}
+  .scroll-cue .line::after{content:"";position:absolute;inset:0;background:var(--coral);
+    animation:drip 2.2s ease-in-out infinite;}
+  @keyframes drip{0%{transform:translateY(-100%);}55%{transform:translateY(0);}100%{transform:translateY(100%);}}
+
+  /* ============ Marquee strip ============ */
+  .marquee{background:var(--ink);color:var(--cream);padding:22px 0;overflow:hidden;
+    border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);}
+  .marquee-track{display:flex;gap:48px;white-space:nowrap;animation:slide 35s linear infinite;font-family:var(--serif);font-size:48px;font-style:italic;}
+  .marquee-track .dot{color:var(--coral);font-style:normal;}
+  @keyframes slide{to{transform:translateX(-50%);}}
+
+  .marquee.alt{background:var(--coral);color:var(--cream);}
+  .marquee.alt .marquee-track{animation-duration:28s;animation-direction:reverse;font-size:36px;}
+
+  /* ============ Concept ============ */
+  .concept{padding:140px 36px 160px;position:relative;background:var(--cream);overflow:hidden;}
+  .concept-grid{display:grid;grid-template-columns:340px 1fr 380px;gap:60px;align-items:start;}
+  .concept .label{font-size:11px;letter-spacing:.3em;font-weight:700;color:var(--coral);margin-bottom:14px;}
+  .concept .num{font-family:var(--serif);font-size:140px;line-height:.9;color:var(--ink);font-style:italic;}
+  .concept .num small{font-size:36px;}
+  .concept-mid{padding-top:120px;}
+  .concept-mid h2{font-family:var(--jp);font-weight:800;font-size:54px;line-height:1.42;letter-spacing:.02em;}
+  .concept-mid h2 .hl{background:linear-gradient(180deg,transparent 60%,var(--mustard) 60%);}
+  .concept-mid h2 .crl{color:var(--coral);font-style:italic;font-family:var(--serif);font-weight:400;}
+  .concept-mid p{margin-top:28px;font-family:var(--jpsans);font-size:14px;line-height:2;color:var(--ink2);}
+  .concept-right{position:relative;padding-top:60px;}
+  .concept-right .photo{width:100%;aspect-ratio:3/4;border-radius:24px;overflow:hidden;
+    background:linear-gradient(170deg,#FFE5C8,#FF8E5C 50%,#4DB6CC 50%,#2A7E91);position:relative;
+    transform:rotate(-2deg);}
+  .concept-right .photo::before{content:"";position:absolute;left:20%;top:18%;width:60%;height:60%;
+    background:#F2EAD3;border-radius:50% 50% 8% 8% / 60% 60% 8% 8%;opacity:.8;}
+  .concept-right .photo::after{content:"";position:absolute;inset:0;
+    background:repeating-linear-gradient(180deg,transparent 0 8px,rgba(255,255,255,.06) 8px 9px);}
+  .concept-right .caption{font-family:var(--serif);font-style:italic;font-size:13px;margin-top:18px;text-align:right;color:var(--ink2);}
+
+  .floating{position:absolute;font-family:var(--serif);font-style:italic;color:var(--aqua-deep);font-size:22px;pointer-events:none;}
+  .floating.f1{left:8%;top:18%;animation:float 8s ease-in-out infinite;}
+  .floating.f2{right:14%;bottom:14%;color:var(--coral);animation:float 7s ease-in-out -2s infinite;}
+  @keyframes float{50%{transform:translateY(-14px) rotate(-3deg);}}
+
+  /* ============ Stay (asymmetric villa cards) ============ */
+  .stay{padding:140px 36px 160px;background:var(--paper);position:relative;overflow:hidden;}
+  .stay-head{display:flex;justify-content:space-between;align-items:end;margin-bottom:80px;}
+  .stay-head .lbl{font-size:11px;letter-spacing:.3em;font-weight:700;color:var(--aqua-deep);}
+  .stay-head h2{font-family:var(--serif);font-size:120px;line-height:.92;font-style:italic;}
+  .stay-head h2 .stroke{-webkit-text-stroke:1.5px var(--ink);color:transparent;font-style:normal;}
+  .stay-head .desc{max-width:280px;font-family:var(--jpsans);font-size:14px;color:var(--ink2);line-height:1.9;}
+
+  .villa-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:24px;position:relative;}
+  .villa{position:relative;overflow:hidden;border-radius:24px;cursor:none;
+    transition:transform .35s cubic-bezier(.2,.8,.2,1);}
+  .villa:hover{transform:translateY(-8px);}
+  .villa-a{grid-column:1/8;aspect-ratio:5/3.4;background:linear-gradient(160deg,#FFE5C8,#FFCEB9 45%,#FF8E5C);}
+  .villa-b{grid-column:7/13;aspect-ratio:5/3.4;background:linear-gradient(170deg,#D7EEF1,#9FD3DD 45%,#2A7E91);margin-top:140px;}
+  .villa-photo-fill{position:absolute;inset:0;}
+  .villa-a .villa-photo-fill::before{content:"";position:absolute;left:50%;top:30%;transform:translateX(-50%);width:50%;height:55%;background:#fff;border-radius:50% 50% 6% 6%;opacity:.65;}
+  .villa-a .villa-photo-fill::after{content:"";position:absolute;bottom:0;left:0;right:0;height:30%;background:rgba(255,150,90,.25);}
+  .villa-b .villa-photo-fill::before{content:"";position:absolute;top:18%;left:50%;transform:translateX(-50%);width:120px;height:120px;border-radius:50%;background:#FFE9A8;opacity:.7;}
+  .villa-b .villa-photo-fill::after{content:"";position:absolute;bottom:0;left:0;right:0;height:35%;background:linear-gradient(180deg,rgba(33,90,110,.4),rgba(33,90,110,.7));}
+
+  .villa-tag{position:absolute;top:24px;left:24px;background:var(--ink);color:var(--cream);
+    padding:8px 14px;border-radius:30px;font-size:11px;letter-spacing:.2em;font-weight:600;}
+  .villa-info{position:absolute;bottom:24px;left:24px;right:24px;display:flex;justify-content:space-between;align-items:end;}
+  .villa-info h3{font-family:var(--jp);font-size:42px;font-weight:800;color:var(--ink);}
+  .villa-info h3 em{font-family:var(--serif);font-style:italic;font-weight:400;font-size:28px;color:var(--ink);display:block;margin-bottom:4px;}
+  .villa-info .meta{font-family:var(--jpsans);font-size:12px;text-align:right;color:var(--ink);line-height:1.7;font-weight:500;}
+  .villa .arrow{position:absolute;right:24px;top:24px;width:44px;height:44px;border-radius:50%;background:var(--ink);
+    color:var(--cream);display:flex;align-items:center;justify-content:center;
+    transition:transform .35s,background .25s;font-size:20px;}
+  .villa:hover .arrow{transform:rotate(-45deg);background:var(--coral);}
+
+  /* floating sticker on stay */
+  .stay-sticker{position:absolute;right:130px;top:200px;width:140px;height:140px;border-radius:50%;
+    background:var(--coral);color:var(--cream);display:flex;align-items:center;justify-content:center;
+    font-family:var(--serif);font-size:18px;font-style:italic;text-align:center;line-height:1.25;
+    animation:spin 14s linear infinite reverse;z-index:2;}
+
+  /* ============ Numbers strip ============ */
+  .numbers{padding:80px 36px;background:var(--cream);display:grid;grid-template-columns:repeat(4,1fr);gap:16px;border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);}
+  .num-cell{display:flex;flex-direction:column;gap:6px;}
+  .num-cell .big{font-family:var(--serif);font-size:88px;line-height:1;font-style:italic;}
+  .num-cell .big .c{color:var(--coral);}
+  .num-cell .big .a{color:var(--aqua-deep);}
+  .num-cell .big .m{color:var(--mustard);}
+  .num-cell .lbl{font-family:var(--jpsans);font-size:13px;letter-spacing:.1em;color:var(--ink2);font-weight:500;}
+  .num-cell .sub{font-size:11px;letter-spacing:.25em;color:var(--ink2);text-transform:uppercase;}
+
+  /* ============ Sauna (asym split) ============ */
+  .sauna{padding:0;background:var(--ink);color:var(--cream);position:relative;overflow:hidden;}
+  .sauna-wrap{display:grid;grid-template-columns:4fr 5fr 3fr;min-height:760px;}
+  .sauna-left{padding:120px 36px 60px;position:relative;display:flex;flex-direction:column;justify-content:space-between;}
+  .sauna-left .lbl{font-size:11px;letter-spacing:.3em;font-weight:700;color:var(--mustard);margin-bottom:24px;}
+  .sauna-left h2{font-family:var(--serif);font-size:96px;font-style:italic;line-height:.95;}
+  .sauna-left h2 .y{color:var(--mustard);}
+  .sauna-left h2 .l{color:var(--lime);}
+  .sauna-left .desc{font-family:var(--jpsans);font-size:14px;line-height:2;color:var(--cream);opacity:.85;max-width:340px;}
+  .sauna-left .tag{font-family:var(--serif);font-style:italic;font-size:14px;color:var(--mustard);}
+
+  .sauna-mid{position:relative;background:linear-gradient(170deg,#8B5A2B,#3a200d 70%,#1A0E08);overflow:hidden;}
+  .sauna-mid::before{content:"";position:absolute;inset:0;
+    background:repeating-linear-gradient(90deg,
+      rgba(60,30,12,.0) 0 26px, rgba(0,0,0,.18) 26px 27px,
+      rgba(0,0,0,.0) 27px 50px, rgba(255,200,150,.05) 50px 51px,
+      rgba(0,0,0,.0) 51px 80px, rgba(0,0,0,.12) 80px 81px);}
+  .sauna-mid::after{content:"";position:absolute;top:-10%;right:-10%;width:60%;height:60%;border-radius:50%;
+    background:radial-gradient(closest-side,rgba(255,194,140,.6),rgba(255,194,140,0));}
+  .sauna-mid .smoke{position:absolute;inset:0;
+    background:radial-gradient(40% 30% at 30% 60%,rgba(255,230,200,.18),transparent 80%),
+               radial-gradient(40% 30% at 70% 80%,rgba(255,230,200,.10),transparent 80%);
+    animation:smoke 14s ease-in-out infinite;}
+  @keyframes smoke{50%{transform:translateY(-12px) scale(1.03);}}
+  .sauna-mid .stove{position:absolute;left:50%;top:62%;transform:translateX(-50%);width:120px;height:140px;
+    background:#1A0E08;border-radius:8px;border:1px solid #4A2D15;}
+  .sauna-mid .stove::before{content:"";position:absolute;left:18%;top:24%;width:64%;height:30%;
+    background:radial-gradient(closest-side,#FFB063,#FF6B47 60%,#7A1F0E);border-radius:6px;}
+  .sauna-mid .temp{position:absolute;left:50%;top:18%;transform:translateX(-50%);
+    font-family:var(--serif);font-style:italic;color:#fff;font-size:54px;text-align:center;}
+  .sauna-mid .temp small{display:block;font-size:11px;letter-spacing:.3em;margin-top:6px;opacity:.7;}
+
+  .sauna-right{padding:120px 28px 60px;position:relative;background:#2A211B;display:flex;flex-direction:column;justify-content:space-between;}
+  .sauna-right .vbig{font-family:var(--serif);font-size:240px;line-height:.9;font-style:italic;color:var(--lime);}
+  .sauna-right .feature-list{font-family:var(--jpsans);font-size:13px;line-height:2.1;color:var(--cream);opacity:.85;}
+  .sauna-right .feature-list li{list-style:none;display:flex;gap:10px;align-items:center;}
+  .sauna-right .feature-list li::before{content:"";width:18px;height:1px;background:var(--mustard);}
+
+  /* ============ Dining (asym 5-tile gallery) ============ */
+  .dining{padding:140px 36px;background:var(--cream);position:relative;overflow:hidden;}
+  .dining-head{display:flex;align-items:end;justify-content:space-between;gap:40px;margin-bottom:60px;}
+  .dining-head .lbl{font-size:11px;letter-spacing:.3em;font-weight:700;color:var(--coral);}
+  .dining-head h2{font-family:var(--jp);font-weight:800;font-size:64px;line-height:1.1;}
+  .dining-head h2 .crl{color:var(--coral);font-family:var(--serif);font-style:italic;font-weight:400;}
+  .dining-head .desc{font-family:var(--jpsans);font-size:14px;color:var(--ink2);max-width:240px;line-height:1.9;}
+
+  .dining-grid{display:grid;grid-template-columns:repeat(12,1fr);grid-auto-rows:120px;gap:16px;}
+  .tile{position:relative;border-radius:18px;overflow:hidden;background:#E8DDC8;}
+  .tile.t1{grid-column:1/6;grid-row:1/4;background:radial-gradient(circle at 50% 55%,#FFCEB9 0%, #F4A261 28%, #BB6633 52%, transparent 52%),#FBE7CB;}
+  .tile.t2{grid-column:6/10;grid-row:1/3;background:linear-gradient(160deg,#EDF6C8,#A8C66C,#5A7A30);}
+  .tile.t3{grid-column:10/13;grid-row:1/3;background:linear-gradient(180deg,#FFE5A8,#F4C430);}
+  .tile.t4{grid-column:6/9;grid-row:3/5;background:linear-gradient(180deg,#9FD3DD,#2A7E91);}
+  .tile.t5{grid-column:9/13;grid-row:3/5;background:linear-gradient(160deg,#FFCEB9,#FF6B47 70%);}
+  .tile .num{position:absolute;top:14px;left:18px;font-family:var(--serif);font-style:italic;font-size:18px;color:var(--ink);}
+  .tile .ttl{position:absolute;bottom:14px;left:18px;font-family:var(--jp);font-weight:800;font-size:22px;color:var(--ink);}
+  .tile .ttl em{font-family:var(--serif);font-style:italic;font-weight:400;font-size:15px;display:block;margin-top:2px;color:var(--ink2);}
+  .tile:hover .ttl{transform:translateY(-4px);transition:transform .3s;}
+  .tile-icon{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:var(--serif);font-size:120px;color:#fff;opacity:.55;font-style:italic;}
+
+  /* ============ Experience scroll-pin ============ */
+  .exp{background:var(--lime);color:var(--ink);padding:140px 36px;position:relative;overflow:hidden;}
+  .exp .marquee-inner{font-family:var(--serif);font-size:200px;font-style:italic;line-height:.92;letter-spacing:-.02em;
+    white-space:nowrap;animation:slide 30s linear infinite;}
+  .exp .marquee-inner span{color:var(--coral);}
+  .exp .row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;margin-top:60px;}
+  .exp .item{padding:28px;background:var(--cream);border-radius:20px;position:relative;
+    transform:translateY(0);transition:transform .35s cubic-bezier(.2,.8,.2,1);}
+  .exp .item:hover{transform:translateY(-8px) rotate(-1deg);}
+  .exp .item:nth-child(2){transform:translateY(30px);}
+  .exp .item:nth-child(2):hover{transform:translateY(22px) rotate(1deg);}
+  .exp .item:nth-child(3){transform:translateY(-20px);}
+  .exp .item:nth-child(3):hover{transform:translateY(-28px) rotate(-1deg);}
+  .exp .item .badge{display:inline-block;padding:6px 12px;border-radius:30px;background:var(--ink);color:var(--cream);font-size:10px;letter-spacing:.2em;font-weight:700;}
+  .exp .item h3{font-family:var(--jp);font-weight:800;font-size:28px;margin:20px 0 8px;}
+  .exp .item h3 em{display:block;font-family:var(--serif);font-style:italic;font-weight:400;color:var(--coral);font-size:18px;margin-bottom:2px;}
+  .exp .item p{font-family:var(--jpsans);font-size:13px;color:var(--ink2);line-height:1.85;}
+  .exp .item .arrow{position:absolute;right:24px;bottom:24px;width:36px;height:36px;border-radius:50%;background:var(--coral);color:var(--cream);display:flex;align-items:center;justify-content:center;}
+
+  /* ============ Booking / CTA ============ */
+  .cta{padding:160px 36px;background:var(--coral);color:var(--cream);position:relative;overflow:hidden;}
+  .cta h2{font-family:var(--serif);font-size:200px;line-height:.86;font-style:italic;text-align:center;letter-spacing:-.02em;}
+  .cta h2 .stroke{-webkit-text-stroke:1.5px var(--cream);color:transparent;font-style:normal;}
+  .cta .sub{text-align:center;font-family:var(--jp);font-size:18px;margin-top:36px;letter-spacing:.05em;}
+  .cta .btn-wrap{display:flex;justify-content:center;margin-top:48px;}
+  .cta .btn{padding:24px 56px;background:var(--cream);color:var(--ink);border-radius:60px;font-weight:700;
+    font-size:18px;letter-spacing:.06em;display:inline-flex;align-items:center;gap:18px;
+    transition:transform .25s,background .25s,color .25s;}
+  .cta .btn:hover{background:var(--ink);color:var(--cream);transform:scale(1.05);}
+  .cta .btn .arrow{width:38px;height:38px;border-radius:50%;background:var(--coral);display:flex;align-items:center;justify-content:center;color:#fff;}
+  .cta-circles span{position:absolute;border-radius:50%;background:var(--cream);opacity:.12;}
+  .cta-circles .c1{width:280px;height:280px;left:-80px;top:-60px;}
+  .cta-circles .c2{width:180px;height:180px;right:-40px;bottom:60px;}
+  .cta-circles .c3{width:120px;height:120px;left:30%;bottom:-20px;}
+
+  /* ============ Footer ============ */
+  footer{background:var(--ink);color:var(--cream);padding:80px 36px 36px;}
+  .ftr{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:48px;align-items:start;}
+  .ftr .logo{font-family:var(--serif);font-size:54px;letter-spacing:.04em;}
+  .ftr .logo small{display:block;font-size:14px;font-style:italic;color:var(--coral);margin-top:6px;}
+  .ftr .col h4{font-size:11px;letter-spacing:.3em;color:var(--coral);margin-bottom:18px;font-weight:700;}
+  .ftr .col li{list-style:none;margin-bottom:10px;font-family:var(--jpsans);font-size:13px;color:var(--cream);opacity:.85;}
+  .ftr .col a:hover{color:var(--coral);}
+  .ftr .info{font-family:var(--jpsans);font-size:13px;line-height:1.85;}
+  .ftr-bot{display:flex;justify-content:space-between;align-items:center;margin-top:60px;padding-top:24px;border-top:1px solid #3A332A;font-size:11px;letter-spacing:.2em;opacity:.6;}
+  .ftr-huge{font-family:var(--serif);font-size:260px;line-height:.85;font-style:italic;color:transparent;-webkit-text-stroke:1.5px var(--cream);margin-top:60px;letter-spacing:-.02em;opacity:.5;}
+
+  /* ============ Reveal animation ============ */
+  .reveal{opacity:0;transform:translateY(40px);transition:opacity .9s ease,transform 1s cubic-bezier(.2,.8,.2,1);}
+  .reveal.in{opacity:1;transform:translateY(0);}
+
+  /* Tabler icons */
+  .ti{font-family:'tabler-icons';font-style:normal;}
+
+  @media (max-width:900px){
+    body{cursor:auto;} .cursor,.cursor-ring{display:none;}
+    .hero-title h1{font-size:120px;} .hero-photo{display:none;}
+    .concept-grid,.sauna-wrap,.numbers,.ftr,.exp .row,.villa-grid{grid-template-columns:1fr;}
+    .villa-b{margin-top:0;}
+  }
+</style>
+</head>
+<body>
+
+<!-- Custom cursor -->
+<div class="cursor" id="cur"></div>
+<div class="cursor-ring" id="curR"></div>
+
+<!-- Top bar -->
+<nav class="topbar">
+  <a class="logo" href="#">covo</a>
+  <div class="nav">
+    <a href="#stay">STAY</a>
+    <a href="#sauna">SAUNA</a>
+    <a href="#dining">DINING</a>
+    <a href="#exp">EXPERIENCE</a>
+    <a href="#access">ACCESS</a>
+  </div>
+  <div class="right">
+    <span>JP / EN</span>
+    <a class="booknow" href="#cta">RESERVATION ↗</a>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="grain"></div>
+  <div class="hero-top">
+    <div class="meta">瀬戸内 . 牛窓 . est . 2024</div>
+    <div></div>
+    <div class="stamp">N 34.62°&nbsp;&nbsp;E 134.16°<br>2 SUITES ONLY</div>
+  </div>
+
+  <div class="hero-title">
+    <h1>
+      <div class="word l1"><span>HELLO,</span></div><br>
+      <span class="it word l2"><span>inland</span></span>
+      <span class="word l2"><span>sea.</span></span><br>
+      <span class="stroke word l3"><span>USHIMADO</span></span>
+    </h1>
+  </div>
+
+  <div class="hero-photo" id="heroPhoto">
+    <div class="sun"></div>
+    <div class="ripples"></div>
+    <div class="villa"></div>
+  </div>
+
+  <div class="sticker">
+    <div>
+      1日<strong>2組</strong>限定<br>
+      <span>covo · 2024 →</span>
+    </div>
+  </div>
+
+  <div class="hero-bottom">
+    <p class="hero-jp">
+      瀬戸内のいちばん静かな町、牛窓。<br>
+      <strong>1日2組限定</strong>の隠れ家ヴィラで、<br>
+      海と、サウナと、おいしいごはん。
+    </p>
+    <div class="scroll-cue">
+      <span>SCROLL</span>
+      <div class="line"></div>
+    </div>
+  </div>
+</section>
+
+<!-- Marquee strip 1 -->
+<div class="marquee">
+  <div class="marquee-track">
+    <span>SETOUCHI <i class="dot">●</i> USHIMADO <i class="dot">●</i> 2 VILLAS <i class="dot">●</i> PRIVATE SAUNA <i class="dot">●</i> OCEAN VIEW <i class="dot">●</i> EST. 2024 <i class="dot">●</i></span>
+    <span>SETOUCHI <i class="dot">●</i> USHIMADO <i class="dot">●</i> 2 VILLAS <i class="dot">●</i> PRIVATE SAUNA <i class="dot">●</i> OCEAN VIEW <i class="dot">●</i> EST. 2024 <i class="dot">●</i></span>
+  </div>
+</div>
+
+<!-- ============ CONCEPT ============ -->
+<section class="concept">
+  <span class="floating f1">— a quiet hideaway</span>
+  <span class="floating f2">welcome ↗</span>
+
+  <div class="concept-grid">
+    <div class="reveal">
+      <div class="label">CONCEPT — 01</div>
+      <div class="num">02<small>/02</small></div>
+      <p style="margin-top:18px;font-family:var(--jpsans);font-size:13px;line-height:1.9;color:var(--ink2);">2棟だけのプライベートヴィラ。ご家族と、大切な人と、一棟まるごと。</p>
+    </div>
+
+    <div class="concept-mid reveal">
+      <h2>
+        <span class="hl">海と、火と、おいしさと。</span><br>
+        ぜんぶ <span class="crl">わたしたち</span> だけのもの。
+      </h2>
+      <p>瀬戸内・牛窓に佇む、隠れ家のように小さなヴィラ。1日2組限定だから、ロビーも、サウナも、目の前の海も、ぜんぶ自分たちのペースで。週末ごとに新しい風景に出会えるよう、ワインや料理のメニューも季節ごとに少しずつ更新しています。</p>
+    </div>
+
+    <div class="concept-right reveal">
+      <div class="photo"></div>
+      <p class="caption">"a slow weekend by the inland sea"</p>
+    </div>
+  </div>
+</section>
+
+<!-- Marquee strip 2 -->
+<div class="marquee alt">
+  <div class="marquee-track">
+    <span>★ 2 villas only ★ private sauna ★ ocean view bath ★ glamping BBQ ★ olive grove cycling ★ sunset cruise ★</span>
+    <span>★ 2 villas only ★ private sauna ★ ocean view bath ★ glamping BBQ ★ olive grove cycling ★ sunset cruise ★</span>
+  </div>
+</div>
+
+<!-- ============ STAY ============ -->
+<section class="stay" id="stay">
+  <div class="stay-head reveal">
+    <div>
+      <div class="lbl">STAY — 2 VILLAS</div>
+      <h2>two<br><span class="stroke">villas,</span><br>two<br><em style="font-style:italic;color:var(--coral);">stories.</em></h2>
+    </div>
+    <div class="desc">
+      まったく違う表情を持つ2棟のヴィラ。気分や季節に合わせて選べる、もうひとつの "わたし" の家。
+    </div>
+  </div>
+
+  <div class="villa-grid">
+    <div class="stay-sticker">RESERVE<br>NOW ↗</div>
+    <a class="villa villa-a reveal" href="#">
+      <div class="villa-photo-fill"></div>
+      <div class="villa-tag">VILLA · 01</div>
+      <div class="arrow">↗</div>
+      <div class="villa-info">
+        <h3><em>Anbai —</em>塩梅</h3>
+        <div class="meta">
+          MAX 4 PAX<br>
+          ◯ 薪ストーブ<br>
+          ◯ 海を望む大窓
+        </div>
+      </div>
+    </a>
+    <a class="villa villa-b reveal" href="#">
+      <div class="villa-photo-fill"></div>
+      <div class="villa-tag">VILLA · 02</div>
+      <div class="arrow">↗</div>
+      <div class="villa-info">
+        <h3><em>Nagi —</em>凪</h3>
+        <div class="meta">
+          MAX 4 PAX<br>
+          ◯ オーシャンビュー風呂<br>
+          ◯ プライベートデッキ
+        </div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- Numbers strip -->
+<section class="numbers reveal">
+  <div class="num-cell">
+    <div class="big"><span class="c">02</span></div>
+    <div class="lbl">villas only</div>
+    <div class="sub">private stay</div>
+  </div>
+  <div class="num-cell">
+    <div class="big"><span class="a">90°C</span></div>
+    <div class="lbl">finnish sauna</div>
+    <div class="sub">heat. breath. sea.</div>
+  </div>
+  <div class="num-cell">
+    <div class="big"><span class="m">365</span></div>
+    <div class="lbl">days of setouchi</div>
+    <div class="sub">always sunny</div>
+  </div>
+  <div class="num-cell">
+    <div class="big">∞</div>
+    <div class="lbl">ocean views</div>
+    <div class="sub">all rooms</div>
+  </div>
+</section>
+
+<!-- ============ SAUNA ============ -->
+<section class="sauna" id="sauna">
+  <div class="sauna-wrap">
+    <div class="sauna-left reveal">
+      <div>
+        <div class="lbl">SAUNA — 03</div>
+        <h2>Heat.<br><span class="y">Breath.</span><br><span class="l">The sea.</span></h2>
+      </div>
+      <div>
+        <p class="desc">瀬戸内の海を望むフィンランド式バレルサウナ。薪のぱちぱち、湯気、そして海風の外気浴。「整う」を超えて、たぶん溶ける。</p>
+        <p class="tag" style="margin-top:24px;">— private use only.</p>
+      </div>
+    </div>
+    <div class="sauna-mid">
+      <div class="smoke"></div>
+      <div class="temp">90°<small>FINNISH BARREL</small></div>
+      <div class="stove"></div>
+    </div>
+    <div class="sauna-right reveal">
+      <div class="vbig">サウナ</div>
+      <ul class="feature-list">
+        <li>薪火 / wood fired</li>
+        <li>セルフロウリュ</li>
+        <li>瀬戸内の外気浴</li>
+        <li>水風呂 → 海</li>
+        <li>夜は星の下で</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DINING ============ -->
+<section class="dining" id="dining">
+  <div class="dining-head reveal">
+    <div>
+      <div class="lbl">DINING — 04</div>
+      <h2>食べる、<span class="crl">焚く、</span><br>かんぱい！</h2>
+    </div>
+    <div class="desc">
+      瀬戸内の魚介、岡山の野菜、地酒。火を囲んでただ笑う、それだけの夜。
+    </div>
+  </div>
+
+  <div class="dining-grid">
+    <div class="tile t1">
+      <div class="num">01</div>
+      <div class="ttl">夕餉<em>BBQ dinner</em></div>
+    </div>
+    <div class="tile t2">
+      <div class="num">02</div>
+      <div class="tile-icon">olive</div>
+      <div class="ttl">朝餉<em>morning plate</em></div>
+    </div>
+    <div class="tile t3">
+      <div class="num">03</div>
+      <div class="tile-icon">★</div>
+      <div class="ttl">乾杯<em>wine & gin</em></div>
+    </div>
+    <div class="tile t4">
+      <div class="num">04</div>
+      <div class="ttl">水<em>setouchi sake</em></div>
+    </div>
+    <div class="tile t5">
+      <div class="num">05</div>
+      <div class="tile-icon">🔥</div>
+      <div class="ttl">焚火<em>bonfire</em></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ EXPERIENCE ============ -->
+<section class="exp" id="exp">
+  <div class="marquee-inner">SLOW DAYS · <span>SLOWER WAVES</span> · SLOW DAYS · <span>SLOWER WAVES</span> · SLOW DAYS · <span>SLOWER WAVES</span> ·</div>
+  <div class="row">
+    <div class="item reveal">
+      <div class="badge">CYCLING</div>
+      <h3><em>olive grove ride</em>オリーブ畑をめぐる</h3>
+      <p>レンタサイクルで日本最古のオリーブ畑、長島愛生園まで。お弁当はご用意します。</p>
+      <div class="arrow">→</div>
+    </div>
+    <div class="item reveal">
+      <div class="badge">CRUISE</div>
+      <h3><em>sunset cruise</em>夕日クルーズ</h3>
+      <p>地元の漁師と巡る瀬戸内サンセット。船からの一杯はちょっと贅沢な気分に。</p>
+      <div class="arrow">→</div>
+    </div>
+    <div class="item reveal">
+      <div class="badge">CHILL</div>
+      <h3><em>do nothing</em>なにもしない</h3>
+      <p>デッキで本を読む。湯に浸かる。波の音だけ聴く。それがいちばん。</p>
+      <div class="arrow">→</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA ============ -->
+<section class="cta" id="cta">
+  <div class="cta-circles"><span class="c1"></span><span class="c2"></span><span class="c3"></span></div>
+  <h2>
+    book <span class="stroke">your</span><br>
+    quiet weekend.
+  </h2>
+  <p class="sub">瀬戸内の週末、空きカレンダーをチェック。</p>
+  <div class="btn-wrap">
+    <a class="btn" href="#">RESERVE NOW <span class="arrow">↗</span></a>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer id="access">
+  <div class="ftr">
+    <div>
+      <div class="logo">covo<small>— ushimado —</small></div>
+      <p class="info" style="margin-top:24px;opacity:.7;">岡山県瀬戸内市牛窓町鹿忍 7195-1<br>Check-in 14:00 / Check-out 10:00<br>+81 869 XX XXXX</p>
+    </div>
+    <div class="col">
+      <h4>STAY</h4>
+      <ul><li><a href="#">Villa Anbai</a></li><li><a href="#">Villa Nagi</a></li><li><a href="#">Plans</a></li></ul>
+    </div>
+    <div class="col">
+      <h4>EXPERIENCE</h4>
+      <ul><li><a href="#">Sauna</a></li><li><a href="#">Dining</a></li><li><a href="#">Cycling</a></li></ul>
+    </div>
+    <div class="col">
+      <h4>INFO</h4>
+      <ul><li><a href="#">Access</a></li><li><a href="#">FAQ</a></li><li><a href="#">News</a></li><li><a href="#">Contact</a></li></ul>
+    </div>
+  </div>
+  <div class="ftr-huge">covo ushimado</div>
+  <div class="ftr-bot">
+    <span>© 2026 covo ushimado · ATELIER CUORE Inc.</span>
+    <span>INSTAGRAM · FACEBOOK · YOUTUBE</span>
+  </div>
+</footer>
+
+<script>
+  // Custom cursor
+  const cur = document.getElementById('cur');
+  const curR = document.getElementById('curR');
+  let mx=0,my=0,rx=0,ry=0;
+  window.addEventListener('mousemove',e=>{
+    mx=e.clientX;my=e.clientY;
+    cur.style.left=mx+'px'; cur.style.top=my+'px';
+  });
+  function ringLoop(){
+    rx += (mx-rx)*0.18; ry += (my-ry)*0.18;
+    curR.style.left=rx+'px'; curR.style.top=ry+'px';
+    requestAnimationFrame(ringLoop);
+  } ringLoop();
+  document.querySelectorAll('a, .villa, .btn, .arrow, .tile').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{cur.classList.add('big');});
+    el.addEventListener('mouseleave',()=>{cur.classList.remove('big');});
+  });
+
+  // Hero photo parallax tilt
+  const photo = document.getElementById('heroPhoto');
+  window.addEventListener('mousemove', e=>{
+    if(!photo) return;
+    const x = (e.clientX/window.innerWidth - 0.5) * 14;
+    const y = (e.clientY/window.innerHeight - 0.5) * 14;
+    photo.style.transform = `translateY(-50%) rotate(3deg) translate(${-x}px, ${-y}px)`;
+  });
+
+  // Reveal on scroll
+  const io = new IntersectionObserver(es=>{
+    es.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('in'); });
+  },{threshold:0.15});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+  // Smooth-scroll for in-page links
+  document.querySelectorAll('a[href^="#"]').forEach(a=>{
+    a.addEventListener('click',e=>{
+      const id = a.getAttribute('href').slice(1);
+      const t = document.getElementById(id);
+      if(t){ e.preventDefault(); t.scrollIntoView({behavior:'smooth'}); }
+    });
+  });
+</script>
+</body>
+</html>
