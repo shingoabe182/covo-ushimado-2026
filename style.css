@@ -334,7 +334,7 @@ body { cursor: auto; }
 .exp-source{margin-top:32px;font-family:var(--serif);font-style:italic;font-size:11px;color:var(--ink-4);text-align:right;letter-spacing:.04em;}
 .exp-source a{border-bottom:0.5px solid var(--ink-4);padding-bottom:2px;}
 
-.exp .ph.e1 div{background:url('https://covo-ushimado.com/wp-content/uploads/2024/06/9430c30cfe2bc64ee47e1bd679682658-1024x768.webp') no-repeat center center/cover;position:relative;}
+.exp .ph.e1 div{background:url('venus_road.png') no-repeat center center/cover;position:relative;}
 .exp .ph.e1 div::before{display:none;}
 .exp .ph.e1 div::after{display:none;}
 .exp .ph.e2 div{background:url('https://covo-ushimado.com/wp-content/uploads/2024/06/IMG_3511-scaled.webp') no-repeat center center/cover;position:relative;}
