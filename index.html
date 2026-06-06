@@ -2,9 +2,9 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="robots" content="noindex,nofollow" />
 <title>covo ushimado — white mock</title>
-<meta name="viewport" content="width=1440" />
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Noto+Serif+JP:wght@200;300;400;500&family=Inter:wght@200;300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css" />
 </head>
@@ -36,8 +36,28 @@
   <div class="right">
     <span>JP / EN</span>
     <a class="booknow" href="#cta">RESERVATION</a>
+    <button class="menu-toggle" id="menuToggle" aria-label="Menu">
+      <span></span>
+      <span></span>
+    </button>
   </div>
 </nav>
+
+<!-- Mobile Navigation Drawer -->
+<div class="mobile-drawer" id="mobileDrawer">
+  <div class="drawer-nav">
+    <a href="#stay">STAY</a>
+    <a href="#sauna">SAUNA</a>
+    <a href="#dining">DINING</a>
+    <a href="#exp">EXPERIENCE</a>
+    <a href="#news">NEWS</a>
+    <a href="#access">ACCESS</a>
+  </div>
+  <div class="drawer-foot">
+    <span>JP / EN</span>
+    <a class="drawer-book" href="#cta">RESERVATION</a>
+  </div>
+</div>
 
 <!-- HERO -->
 <section class="hero" id="hero-sentinel">

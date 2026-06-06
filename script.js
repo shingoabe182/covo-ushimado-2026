@@ -53,3 +53,17 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
     if(t){ e.preventDefault(); t.scrollIntoView({behavior:'smooth'}); }
   });
 });
+
+// Mobile Menu Trigger
+const menuToggle = document.getElementById('menuToggle');
+const mobileDrawer = document.getElementById('mobileDrawer');
+if (menuToggle && mobileDrawer) {
+  menuToggle.addEventListener('click', () => {
+    document.body.classList.toggle('menu-active');
+  });
+  mobileDrawer.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      document.body.classList.remove('menu-active');
+    });
+  });
+}
