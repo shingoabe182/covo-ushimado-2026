@@ -41,7 +41,10 @@
 
   /* ============ Top bar ============ */
   .topbar{position:fixed;top:0;left:0;right:0;z-index:50;padding:18px 36px;
-    display:flex;align-items:center;justify-content:space-between;mix-blend-mode:difference;color:#fff;}
+    display:flex;align-items:center;justify-content:space-between;mix-blend-mode:difference;color:#fff;
+    transition:transform 0.4s cubic-bezier(0.16,1,0.3,1), padding 0.4s ease, background-color 0.4s ease, color 0.4s ease, box-shadow 0.4s ease;}
+  .topbar.scrolled{mix-blend-mode:normal;background-color:rgba(251, 246, 233, 0.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:var(--ink);padding:12px 36px;box-shadow:0 1px 0 rgba(59, 52, 43, 0.08);}
+  .topbar.hidden{transform:translateY(-100%);}
   .topbar .logo{font-family:var(--serif);font-size:30px;letter-spacing:.04em;}
   .topbar .nav{display:flex;gap:28px;font-size:13px;letter-spacing:.18em;font-weight:500;}
   .topbar .nav a{position:relative;padding:6px 2px;}
@@ -49,9 +52,10 @@
     transform:scaleX(0);transform-origin:right;transition:transform .35s cubic-bezier(.7,0,.15,1);}
   .topbar .nav a:hover::after{transform:scaleX(1);transform-origin:left;}
   .topbar .right{display:flex;align-items:center;gap:24px;font-size:12px;letter-spacing:.18em;}
-  .topbar .booknow{padding:10px 18px;border:1px solid #fff;border-radius:30px;font-weight:600;
+  .topbar .booknow{padding:10px 18px;border:1px solid currentColor;border-radius:30px;font-weight:600;
     transition:background .25s,color .25s;}
-  .topbar .booknow:hover{background:#fff;color:var(--ink);}
+  .topbar .booknow:hover{background:currentColor;color:var(--ink);}
+  .topbar.scrolled .booknow:hover{background:var(--ink);color:var(--cream);}
 
   /* ============ Hero ============ */
   .hero{position:relative;height:100vh;min-height:780px;padding:120px 36px 60px;overflow:hidden;
@@ -664,6 +668,39 @@
       const t = document.getElementById(id);
       if(t){ e.preventDefault(); t.scrollIntoView({behavior:'smooth'}); }
     });
+  });
+
+  // Smart Header (Scroll behavior & blur activation)
+  const topbar = document.querySelector('.topbar');
+  let lastScrollY = window.scrollY;
+
+  window.addEventListener('scroll', () => {
+    const currentScrollY = window.scrollY;
+    const windowHeight = window.innerHeight;
+    const docHeight = document.documentElement.scrollHeight;
+
+    // 1. Scrolled styling (blur & background)
+    if (currentScrollY > 50) {
+      topbar.classList.add('scrolled');
+    } else {
+      topbar.classList.remove('scrolled');
+    }
+
+    // 2. Hide on scroll down, show on scroll up (Smart Header)
+    // Avoid hiding when near top of the page (currentScrollY < 150)
+    // Keep header hidden at the very bottom near the footer to avoid overlapping with footer links
+    if (currentScrollY > lastScrollY && currentScrollY > 150) {
+      topbar.classList.add('hidden');
+    } else {
+      if (currentScrollY + windowHeight >= docHeight - 120) {
+        // Hide topbar when close to/inside the footer
+        topbar.classList.add('hidden');
+      } else {
+        topbar.classList.remove('hidden');
+      }
+    }
+
+    lastScrollY = currentScrollY;
   });
 </script>
 </body>

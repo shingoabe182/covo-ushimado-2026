@@ -42,7 +42,10 @@
 
   /* ================= Top bar ================= */
   .topbar{position:fixed;top:0;left:0;right:0;z-index:50;padding:28px 56px;
-    display:flex;align-items:center;justify-content:space-between;color:#fff;mix-blend-mode:difference;}
+    display:flex;align-items:center;justify-content:space-between;color:#fff;mix-blend-mode:difference;
+    transition:transform 0.4s cubic-bezier(0.16,1,0.3,1), padding 0.4s ease, background-color 0.4s ease, color 0.4s ease, box-shadow 0.4s ease;}
+  .topbar.scrolled{mix-blend-mode:normal;background-color:rgba(246, 241, 229, 0.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:var(--ink);padding:16px 56px;box-shadow:0 1px 0 rgba(140, 126, 106, 0.08);}
+  .topbar.hidden{transform:translateY(-100%);}
   .topbar .logo{font-family:var(--serif);font-size:30px;font-weight:300;letter-spacing:.32em;text-transform:lowercase;}
   .topbar .nav{display:flex;gap:36px;font-family:var(--sans);font-size:11px;letter-spacing:.32em;font-weight:400;}
   .topbar .nav a{position:relative;}
@@ -52,6 +55,8 @@
   .topbar .right{display:flex;align-items:center;gap:32px;font-size:11px;letter-spacing:.32em;}
   .topbar .booknow{padding:11px 22px;border:0.5px solid currentColor;font-weight:400;
     transition:background .4s,color .4s;}
+  .topbar .booknow:hover{background:currentColor;color:var(--ink);}
+  .topbar.scrolled .booknow:hover{background:var(--ink);color:var(--ivory);}
 
   /* ================= Hero ================= */
   .hero{position:relative;height:100vh;min-height:820px;
@@ -577,6 +582,39 @@
       const t = document.getElementById(id);
       if(t){ e.preventDefault(); t.scrollIntoView({behavior:'smooth'}); }
     });
+  });
+
+  // Smart Header (Scroll behavior & blur activation)
+  const topbar = document.querySelector('.topbar');
+  let lastScrollY = window.scrollY;
+
+  window.addEventListener('scroll', () => {
+    const currentScrollY = window.scrollY;
+    const windowHeight = window.innerHeight;
+    const docHeight = document.documentElement.scrollHeight;
+
+    // 1. Scrolled styling (blur & background)
+    if (currentScrollY > 50) {
+      topbar.classList.add('scrolled');
+    } else {
+      topbar.classList.remove('scrolled');
+    }
+
+    // 2. Hide on scroll down, show on scroll up (Smart Header)
+    // Avoid hiding when near top of the page (currentScrollY < 150)
+    // Keep header hidden at the very bottom near the footer to avoid overlapping with footer links
+    if (currentScrollY > lastScrollY && currentScrollY > 150) {
+      topbar.classList.add('hidden');
+    } else {
+      if (currentScrollY + windowHeight >= docHeight - 120) {
+        // Hide topbar when close to/inside the footer
+        topbar.classList.add('hidden');
+      } else {
+        topbar.classList.remove('hidden');
+      }
+    }
+
+    lastScrollY = currentScrollY;
   });
 </script>
 </body>
