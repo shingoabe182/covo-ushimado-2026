@@ -430,11 +430,21 @@ body { cursor: auto; }
 .cta h2 em{font-style:italic;}
 .cta h2 .stroke{-webkit-text-stroke:0.4px var(--ink);color:transparent;}
 .cta .jp{margin-top:24px;font-family:var(--jp);font-size:13px;letter-spacing:.12em;color:var(--ink-3);}
-.cta .btn-wrap{margin-top:40px;}
-.cta .btn{display:inline-flex;align-items:center;gap:14px;padding:16px 32px;border:0.5px solid var(--ink);
+.cta .btn-wrap{margin-top:40px;display:flex;flex-direction:column;align-items:center;gap:14px;}
+.cta .btn{display:inline-flex;align-items:center;justify-content:center;gap:14px;padding:16px 32px;border:0.5px solid var(--ink);
   font-size:10px;letter-spacing:.3em;color:var(--ink);transition:background .4s,color .4s;}
 .cta .btn:hover{background:var(--ink);color:#FFF;}
 .cta .btn .arrow{font-family:var(--serif);font-style:italic;font-size:13px;letter-spacing:0;}
+/* OTA reservation buttons */
+.cta .btn-ota{min-width:260px;}
+.cta .btn-ota .ota-name{font-family:var(--jp);font-weight:400;font-size:12px;letter-spacing:.18em;}
+.cta .btn-ota .ota-name em{font-family:var(--serif);font-style:italic;font-weight:400;letter-spacing:.04em;color:var(--brass);margin-right:8px;transition:color .4s;}
+.cta .btn-ota:hover .ota-name em{color:#E3CFA6;}
+/* booking.com = primary (filled) */
+.cta .btn-ota.is-primary{background:var(--ink);color:#FFF;}
+.cta .btn-ota.is-primary .ota-name em{color:#E3CFA6;}
+.cta .btn-ota.is-primary:hover{background:var(--brass);border-color:var(--brass);}
+.cta .btn-ota.is-primary:hover .ota-name em{color:#FFF;}
 
 /* ============ FAQ ============ */
 .faq{padding:100px 24px;background:var(--white);border-top:0.5px solid var(--line-soft);}
@@ -745,9 +755,11 @@ footer{background:var(--white);color:var(--ink);padding:80px 24px 40px;border-to
   .cta h2 { font-size: 128px; line-height: 1.04; margin-top: 32px; }
   .cta h2 .stroke { -webkit-text-stroke: 0.6px var(--ink); }
   .cta .jp { margin-top: 42px; font-size: 14px; letter-spacing: .16em; }
-  .cta .btn-wrap { margin-top: 64px; }
+  .cta .btn-wrap { margin-top: 64px; flex-direction: row; justify-content: center; gap: 20px; }
   .cta .btn { padding: 22px 48px; font-size: 11px; letter-spacing: .4em; }
   .cta .btn .arrow { font-size: 14px; }
+  .cta .btn-ota { min-width: 300px; }
+  .cta .btn-ota .ota-name { font-size: 13px; letter-spacing: .22em; }
 
   /* Restore FAQ Desktop */
   .faq { padding: 180px 56px; }
@@ -795,4 +807,148 @@ footer{background:var(--white);color:var(--ink);padding:80px 24px 40px;border-to
   .reserve-fab:hover .arrow { transform: translate(3px, -3px); color: #FFF; }
   .reserve-fab:hover .label .en { color: #FFF; }
   .reserve-fab:hover .pulse { background: #FFF; box-shadow: none; animation: none; }
+}
+
+/* ==========================================================================
+   RICH MOTION LAYER  (added — refined, brand-appropriate animation)
+   ========================================================================== */
+
+/* Scroll progress — hairline brass bar at the very top */
+.scroll-progress{position:fixed;top:0;left:0;height:2px;width:0;z-index:80;
+  background:linear-gradient(90deg,var(--brass),#c7ac80);
+  box-shadow:0 0 8px -1px rgba(149,124,88,.5);
+  transform-origin:left;pointer-events:none;transition:opacity .4s ease;}
+
+/* ---- Hero entrance: gentle fade-up on load (h1 keeps its own rise) ---- */
+.hero .hero-top .meta,
+.hero .hero-top .stamp,
+.hero .hero-mid .eyebrow,
+.hero .hero-mid .jp,
+.hero .hero-bot > *{
+  opacity:0;transform:translateY(16px);
+  animation:heroIn 1.4s cubic-bezier(.2,.8,.2,1) forwards;}
+.hero .hero-mid .eyebrow{animation-delay:.25s;}
+.hero .hero-top .meta{animation-delay:.5s;}
+.hero .hero-top .stamp{animation-delay:.65s;}
+.hero .hero-mid .jp{animation-delay:1.05s;}
+.hero .hero-bot > *{animation-delay:1.3s;}
+@keyframes heroIn{to{opacity:1;transform:translateY(0);}}
+/* hero video: slow settle on load */
+.hero .img video{animation:heroMedia 2.6s cubic-bezier(.2,.8,.2,1) forwards;}
+@keyframes heroMedia{from{transform:scale(1.08);}to{transform:scale(1);}}
+
+/* ---- Staggered children inside a revealed block ---- */
+.reveal .stagger-child,
+.reveal.stagger > *{
+  opacity:0;transform:translateY(22px);
+  transition:opacity 1s ease,transform 1.1s cubic-bezier(.2,.8,.2,1);
+  transition-delay:calc(var(--d,0) * 90ms);}
+.reveal.in .stagger-child,
+.reveal.in.stagger > *{opacity:1;transform:translateY(0);}
+
+/* list items (amenities / kitchen / schedule / faq / exp-more / access)
+   FAIL-OPEN: visible by default; animate only when .in is added */
+.js-stagger.in > *{animation:staggerUp .9s cubic-bezier(.2,.8,.2,1) both;
+  animation-delay:calc(var(--d,0) * 70ms);}
+@keyframes staggerUp{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
+
+/* ---- Image wipe-in reveal (photos uncover + slow zoom out)
+   FAIL-OPEN: image is fully visible by default; the wipe plays as a
+   one-shot animation when .in is added, so it can never get stuck hidden ---- */
+.media-reveal.in{animation:mediaWipe 1.3s cubic-bezier(.7,0,.15,1) both;}
+@keyframes mediaWipe{from{clip-path:inset(0 100% 0 0);}to{clip-path:inset(0 0 0 0);}}
+.media-reveal.in > img,
+.media-reveal.in .inner{animation:mediaZoom 1.8s cubic-bezier(.2,.8,.2,1) both;}
+@keyframes mediaZoom{from{transform:scale(1.12);}to{transform:scale(1);}}
+
+/* ---- Heading italic gets an under-stroke that draws in on reveal ---- */
+.sec-head h2 em,.exp-head h2 em,.faq-head h2 em,.access-head h2 em,
+.intro h2 em,.cta h2 em{position:relative;display:inline-block;}
+.sec-head.in h2 em::after,.exp-head.in h2 em::after,.faq-head.in h2 em::after,
+.access-head.in h2 em::after,.intro.in h2 em::after,.cta.in h2 em::after{
+  content:"";position:absolute;left:0;right:0;bottom:.04em;height:1px;
+  background:var(--brass);transform:scaleX(0);transform-origin:left;
+  animation:drawLine 1.1s .55s cubic-bezier(.7,0,.15,1) forwards;}
+@keyframes drawLine{to{transform:scaleX(1);}}
+
+/* ---- Card hover lift ---- */
+@media (min-width:1024px){
+  .villa,.meal-card,.exp-item,.bed-card,.kitchen-card{
+    transition:transform .6s cubic-bezier(.2,.8,.2,1),box-shadow .6s ease;}
+  .villa:hover,.meal-card:hover,.exp-item:hover{
+    transform:translateY(-6px);}
+  .bed-card,.kitchen-card{will-change:transform;}
+  .bed-card:hover,.kitchen-card:hover{transform:translateY(-5px) scale(1.012);
+    box-shadow:0 24px 50px -24px rgba(0,0,0,.28);}
+  /* magnetic buttons follow the cursor a touch */
+  .btn,.map-link,.instagram-btn,.more{transition:transform .25s cubic-bezier(.2,.8,.2,1),background .35s,color .35s,border-color .35s;}
+}
+
+/* ---- Smooth FAQ accordion ---- */
+.faq-item{overflow:hidden;}
+.faq-item > p{transition:opacity .5s ease;}
+.faq-item summary{transition:color .35s ease;}
+.faq-item summary::-webkit-details-marker{display:none;}
+.faq-item[open] summary{color:var(--brass);}
+
+/* ---- Quote: soft float of the brushed stroke ---- */
+.quote .stroke{display:inline-block;animation:floatY 7s ease-in-out infinite;}
+@keyframes floatY{50%{transform:translateY(-5px);}}
+
+/* ---- Section reveal: also nudge non-reveal sections via in-view fade ---- */
+.fade-section{opacity:0;transform:translateY(28px);
+  transition:opacity 1.1s ease,transform 1.3s cubic-bezier(.2,.8,.2,1);}
+.fade-section.in{opacity:1;transform:translateY(0);}
+
+/* ==========================================================================
+   SIGNATURE MOTION  (water ripple / tide reveal / heat haze / GPS type)
+   ========================================================================== */
+
+/* 1. Hero water-ripple canvas */
+.hero .ripple-canvas{position:absolute;inset:0;z-index:2;pointer-events:none;}
+.hero .hero-top,.hero .hero-mid,.hero .hero-bot{z-index:4;}
+.hero .vignette{z-index:3;}
+
+/* 2. Venus Road — tide recedes on hover to reveal the sand path */
+.exp-item.tide .ph{position:relative;}
+.exp-item.tide .tide-water{position:absolute;inset:0;z-index:2;pointer-events:none;
+  background:
+    linear-gradient(180deg,rgba(36,74,86,.10),rgba(28,82,96,.34) 55%,rgba(20,66,80,.5)),
+    repeating-linear-gradient(180deg,rgba(255,255,255,0) 0 9px,rgba(255,255,255,.07) 9px 10px);
+  background-size:100% 100%, 100% 22px;
+  backdrop-filter:saturate(1.1) brightness(.94);
+  clip-path:inset(0 0 0 0);
+  transition:clip-path 1.5s cubic-bezier(.7,0,.15,1);
+  animation:tideShimmer 5s ease-in-out infinite;}
+@keyframes tideShimmer{50%{background-position:0 0, 0 11px;}}
+.exp-item.tide:hover .tide-water{clip-path:inset(100% 0 0 0);}
+.exp-item.tide .tide-hint{position:absolute;left:14px;bottom:14px;z-index:3;
+  font-family:var(--serif);font-style:italic;font-size:12px;letter-spacing:.12em;
+  color:#fff;text-shadow:0 1px 6px rgba(0,0,0,.4);opacity:.92;
+  transition:opacity .6s ease;pointer-events:none;}
+.exp-item.tide:hover .tide-hint{opacity:0;}
+
+/* 3. Sauna heat haze (filter applied via JS-injected SVG) */
+.sauna-img.heat-on{will-change:filter;}
+.svg-defs{position:absolute;width:0;height:0;overflow:hidden;}
+
+/* 4. GPS typewriter coordinates */
+.hero-top .stamp .gps-line{display:inline-block;white-space:pre;}
+.hero-top .stamp .gps-caret{display:inline-block;margin-left:1px;
+  color:var(--brass);animation:gpsBlink 1s steps(1) infinite;}
+.hero-top .stamp .gps-caret.done{animation:none;opacity:0;}
+@keyframes gpsBlink{50%{opacity:0;}}
+
+/* ---- Respect reduced-motion ---- */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;
+    transition-duration:.001ms!important;scroll-behavior:auto!important;}
+  .media-reveal{clip-path:none!important;}
+  .scroll-progress{display:none;}
+  .hero .ripple-canvas{display:none;}
+  .sauna-img.heat-on{filter:none!important;}
+  .exp-item.tide .tide-water{animation:none;}
+  .hero .hero-top .meta,.hero .hero-top .stamp,.hero .hero-mid .eyebrow,
+  .hero .hero-mid .jp,.hero .hero-bot > *,.reveal .stagger-child,
+  .reveal.stagger > *,.js-stagger > *,.fade-section{opacity:1;transform:none;}
 }
