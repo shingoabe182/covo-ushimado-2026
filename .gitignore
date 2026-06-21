@@ -1,3 +1,8 @@
 .DS_Store
 node_modules/
 .netlify/
+
+# temporary asset extraction (delete locally; not committed)
+assets/_extract/
+assets/06.zip
+download-assets.sh

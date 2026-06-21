@@ -134,7 +134,7 @@ body { cursor: auto; }
 /* ============ Hero ============ */
 .hero{position:relative;height:100vh;min-height:640px;overflow:hidden;color:#fff;background:#000;}
 .hero .img{position:absolute;inset:0;
-  background:url('https://covo-ushimado.com/wp-content/uploads/2024/06/名称未設定のアートワーク14-scaled.webp') no-repeat center center/cover;}
+  background:url('assets/art-14.webp') no-repeat center center/cover;}
 .hero .img::before{display:none;}
 .hero .img::after{display:none;}
 .hero .ripple{position:absolute;left:0;right:0;top:62%;bottom:0;
@@ -189,10 +189,10 @@ body { cursor: auto; }
 .villa{position:relative;display:block;}
 .villa .ph{aspect-ratio:5/3.6;overflow:hidden;position:relative;}
 .villa .ph .inner{position:absolute;inset:0;transition:transform 1.4s cubic-bezier(.2,.8,.2,1);}
-.villa-a .ph .inner{background:url('https://covo-ushimado.com/wp-content/uploads/2024/06/名称未設定のアートワーク4-scaled.webp') no-repeat center center/cover;}
+.villa-a .ph .inner{background:url('assets/art-4.webp') no-repeat center center/cover;}
 .villa-a .ph .inner::before{display:none;}
 .villa-a .ph .inner::after{display:none;}
-.villa-b .ph .inner{background:url('https://covo-ushimado.com/wp-content/uploads/2024/06/名称未設定のアートワーク8-scaled.webp') no-repeat center center/cover;}
+.villa-b .ph .inner{background:url('assets/art-8.webp') no-repeat center center/cover;}
 .villa-b .ph .inner::before{display:none;}
 .villa-b .ph .inner::after{display:none;}
 
@@ -219,9 +219,9 @@ body { cursor: auto; }
 .bed-card{display:block;}
 .bed-photo{position:relative;aspect-ratio:5/3.6;overflow:hidden;background:no-repeat center center/cover;}
 .bed-photo::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0),rgba(15,12,8,.28));}
-.bed-photo-01{background-image:url('https://covo-ushimado.com/wp-content/uploads/2024/06/20240610-DSC05241-1920x1280.webp');}
-.bed-photo-02{background-image:url('https://covo-ushimado.com/wp-content/uploads/2024/06/名称未設定のアートワーク15-scaled.webp');}
-.bed-photo-03{background-image:url('https://covo-ushimado.com/wp-content/uploads/2024/06/cc39790d2c3bbb50d66a62dca88f5ebc-1920x1439.webp');}
+.bed-photo-01{background-image:url('assets/dsc05241.webp');}
+.bed-photo-02{background-image:url('assets/art-15.webp');}
+.bed-photo-03{background-image:url('assets/cc39790-1920.webp');}
 .bed-card figcaption{padding:14px 0 0;border-bottom:0.5px solid var(--line);padding-bottom:12px;}
 .bed-card figcaption span{display:block;font-family:var(--serif);font-style:italic;font-size:11px;letter-spacing:.3em;color:var(--brass);margin-bottom:6px;}
 .bed-card figcaption strong{display:block;font-family:var(--jp);font-weight:300;font-size:15px;line-height:1.6;color:var(--ink);letter-spacing:.04em;}
@@ -252,8 +252,8 @@ body { cursor: auto; }
 .kitchen-card{display:block;}
 .kitchen-photo{position:relative;aspect-ratio:5/3.6;overflow:hidden;background:no-repeat center center/cover;}
 .kitchen-photo::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0),rgba(15,12,8,.28));}
-.kitchen-photo-01{background-image:url('https://covo-ushimado.com/wp-content/uploads/2024/06/名称未設定のアートワーク6-scaled.webp');}
-.kitchen-photo-02{background-image:url('https://covo-ushimado.com/wp-content/uploads/2024/06/20240610-DSC05289-1920x1280.webp');}
+.kitchen-photo-01{background-image:url('assets/art-6.webp');}
+.kitchen-photo-02{background-image:url('assets/dsc05289.webp');}
 .kitchen-card figcaption{padding:14px 0 0;border-bottom:0.5px solid var(--line);padding-bottom:12px;}
 .kitchen-card figcaption span{display:block;font-family:var(--serif);font-style:italic;font-size:11px;letter-spacing:.3em;color:var(--brass);margin-bottom:6px;}
 .kitchen-card figcaption strong{display:block;font-family:var(--jp);font-weight:300;font-size:15px;line-height:1.6;color:var(--ink);letter-spacing:.04em;}
@@ -267,7 +267,7 @@ body { cursor: auto; }
 /* ============ Sauna ============ */
 .sauna{background:#101010;color:#FBFAF7;position:relative;overflow:hidden;}
 .sauna-wrap{display:flex;flex-direction:column;}
-.sauna-img{height:320px;background:url('https://covo-ushimado.com/wp-content/uploads/2024/06/名称未設定のアートワーク-scaled.webp') no-repeat center center/cover;position:relative;overflow:hidden;}
+.sauna-img{height:320px;background:url('assets/art-1.webp') no-repeat center center/cover;position:relative;overflow:hidden;}
 .sauna-img::before{display:none;}
 .sauna-img::after{display:none;}
 .sauna-img .glow{position:absolute;left:50%;top:55%;transform:translateX(-50%);width:200px;height:120px;
@@ -330,7 +330,7 @@ body { cursor: auto; }
 .meal-card{display:flex;flex-direction:column;gap:20px;}
 .meal-photo{aspect-ratio:5/3.6;overflow:hidden;background:no-repeat center center/cover;position:relative;}
 .meal-photo::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0),rgba(15,12,8,.18));}
-.meal-photo-bbq{background-image:url('https://covo-ushimado.com/wp-content/uploads/2024/06/LINE_ALBUM_写真_240618_13.webp');}
+.meal-photo-bbq{background-image:url('assets/dining-13.webp');}
 .meal-copy{border-top:0.5px solid var(--line);padding-top:18px;}
 .meal-copy .no{font-family:var(--serif);font-style:italic;font-size:12px;letter-spacing:.3em;color:var(--brass);margin-bottom:10px;}
 .meal-copy h3{font-family:var(--jp);font-weight:300;font-size:22px;line-height:1.4;color:var(--ink);letter-spacing:.06em;}
@@ -396,7 +396,7 @@ body { cursor: auto; }
 .news-feature{display:block;}
 .news-feature .ph{aspect-ratio:5/4;overflow:hidden;position:relative;}
 .news-feature .ph div{position:absolute;inset:0;transition:transform 1.4s cubic-bezier(.2,.8,.2,1);
-  background:url('https://covo-ushimado.com/wp-content/uploads/2024/06/cc39790d2c3bbb50d66a62dca88f5ebc-scaled.webp') no-repeat center center/cover;}
+  background:url('assets/cc39790-scaled.webp') no-repeat center center/cover;}
 .news-feature .ph div::before{display:none;}
 .news-feature .ph div::after{display:none;}
 .news-feature:hover .ph div{transform:scale(1.04);}
