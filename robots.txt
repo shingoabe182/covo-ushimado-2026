@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Design mock variants — keep out of search
+Disallow: /covo_white.html
+Disallow: /covo_pop.html
+Disallow: /covo_luxe.html
+
+Sitemap: https://covo-ushimado.com/sitemap.xml
